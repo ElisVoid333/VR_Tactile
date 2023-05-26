@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44202968, g: 0.45022535, b: 0.47379774, a: 1}
+  m_IndirectSpecularColor: {r: 0.44202876, g: 0.45022064, b: 0.47379425, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -381,8 +381,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_handedness: 2
-  defaultAmplitude: 0.2
-  defaultDuration: 0.5
 --- !u!64 &195061986
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1024,8 +1022,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_handedness: 2
-  defaultAmplitude: 0.2
-  defaultDuration: 0.5
 --- !u!64 &433677117
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4563,8 +4559,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_handedness: 2
-  defaultAmplitude: 0.2
-  defaultDuration: 0.5
 --- !u!136 &1427277054
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5583,8 +5577,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_handedness: 2
-  defaultAmplitude: 0.2
-  defaultDuration: 0.5
 --- !u!64 &1723773600
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -13377,7 +13369,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5679112963158107033}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 887c8dbd7b891004dbddaf2d9f439564, type: 3}
   m_Name: 
@@ -15209,6 +15201,10 @@ PrefabInstance:
     - target: {fileID: 3282029263655771837, guid: 885ecae56b16f13428a67de5ae482a72, type: 3}
       propertyPath: m_Name
       value: HandGrabInteractor
+      objectReference: {fileID: 0}
+    - target: {fileID: 3988025341347685241, guid: 885ecae56b16f13428a67de5ae482a72, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3988025341347685241, guid: 885ecae56b16f13428a67de5ae482a72, type: 3}
       propertyPath: _gameObjects.Array.size
