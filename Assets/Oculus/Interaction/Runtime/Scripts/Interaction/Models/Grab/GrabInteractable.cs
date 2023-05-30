@@ -25,6 +25,9 @@ namespace Oculus.Interaction
     public class GrabInteractable : PointerInteractable<GrabInteractor, GrabInteractable>,
                                       IRigidbodyRef, ICollidersRef
     {
+        [SerializeField, Interface(typeof(IPointableElement))]
+        private MonoBehaviour _pointableElement;
+
         private Collider[] _colliders;
         public Collider[] Colliders => _colliders;
 
@@ -89,20 +92,22 @@ namespace Oculus.Interaction
         protected override void Awake()
         {
             base.Awake();
+            if (_grabRegistry == null)
+            {
+                _grabRegistry = new CollisionInteractionRegistry<GrabInteractor, GrabInteractable>();
+                SetRegistry(_grabRegistry);
+            }
+            PointableElement = _pointableElement as IPointableElement;
         }
 
         protected override void Start()
         {
             this.BeginStart(ref _started, () => base.Start());
             this.AssertField(Rigidbody, nameof(Rigidbody));
-            if (_grabRegistry == null)
-            {
-                _grabRegistry = new CollisionInteractionRegistry<GrabInteractor, GrabInteractable>();
-                SetRegistry(_grabRegistry);
-            }
             _colliders = Rigidbody.GetComponentsInChildren<Collider>();
             this.AssertCollectionField(_colliders, nameof(_colliders),
                $"The associated {AssertUtils.Nicify(nameof(Rigidbody))} must have at least one Collider.");
+            this.AssertField(PointableElement, nameof(PointableElement));
             this.EndStart(ref _started);
         }
 
@@ -134,14 +139,21 @@ namespace Oculus.Interaction
 
         #region Inject
 
-        public void InjectAllGrabInteractable(Rigidbody rigidbody)
+        public void InjectAllGrabInteractable(Rigidbody rigidbody, IPointableElement pointableElement)
         {
             InjectRigidbody(rigidbody);
+            InjectPointableElement(pointableElement);
         }
 
         public void InjectRigidbody(Rigidbody rigidbody)
         {
             _rigidbody = rigidbody;
+        }
+
+        public void InjectPointableElement(IPointableElement pointableElement)
+        {
+            PointableElement = pointableElement;
+            _pointableElement = pointableElement as MonoBehaviour;
         }
 
         public void InjectOptionalGrabSource(Transform grabSource)

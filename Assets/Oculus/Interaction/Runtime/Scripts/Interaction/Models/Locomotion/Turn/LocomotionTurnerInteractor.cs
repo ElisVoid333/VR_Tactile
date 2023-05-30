@@ -38,7 +38,7 @@ namespace Oculus.Interaction.Locomotion
 
         [SerializeField, Interface(typeof(ISelector))]
         [Tooltip("Selector for the interactor.")]
-        private UnityEngine.Object _selector;
+        private MonoBehaviour _selector;
 
         [SerializeField]
         [Tooltip("Point used to stabilize the rotation of the point")]
@@ -46,7 +46,7 @@ namespace Oculus.Interaction.Locomotion
 
         [SerializeField, Interface(typeof(ITrackingToWorldTransformer))]
         [Tooltip("Transformer is required so calculations can be done in Tracking space")]
-        private UnityEngine.Object _transformer;
+        private MonoBehaviour _transformer;
         /// <summary>
         /// Transformer is required so calculations can be done in Tracking space
         /// </summary>
@@ -170,7 +170,7 @@ namespace Oculus.Interaction.Locomotion
         private void DragMidPoint(Pose worldMidPoint)
         {
             Vector3 midPointPos = worldMidPoint.position;
-            float distance = Mathf.Abs(_axisValue) - _dragThresold * this.transform.lossyScale.x;
+            float distance = Mathf.Abs(_axisValue) - _dragThresold;
             if (distance <= 0)
             {
                 return;
@@ -206,8 +206,9 @@ namespace Oculus.Interaction.Locomotion
         /// <returns>A value between -1 and 1</returns>
         public float Value()
         {
-            return Mathf.Clamp(_axisValue / (_dragThresold * this.transform.lossyScale.x), -1f, 1f);
+            return Mathf.Clamp(_axisValue / _dragThresold, -1f, 1f);
         }
+
 
         protected override LocomotionTurnerInteractable ComputeCandidate()
         {
@@ -234,7 +235,7 @@ namespace Oculus.Interaction.Locomotion
 
         public void InjectSelector(ISelector selector)
         {
-            _selector = selector as UnityEngine.Object;
+            _selector = selector as MonoBehaviour;
             Selector = selector;
         }
 
@@ -245,7 +246,7 @@ namespace Oculus.Interaction.Locomotion
 
         public void InjectTransformer(ITrackingToWorldTransformer transformer)
         {
-            _transformer = transformer as UnityEngine.Object;
+            _transformer = transformer as MonoBehaviour;
             Transformer = transformer;
         }
         #endregion

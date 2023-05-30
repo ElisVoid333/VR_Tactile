@@ -16,7 +16,7 @@ namespace Meta.WitAi.Requests
     internal class WitInfoVRequest : WitVRequest, IWitInfoVRequest
     {
         // Constructor
-        public WitInfoVRequest(IWitRequestConfiguration configuration, bool useServerToken = true) : base(configuration, null, useServerToken) {}
+        public WitInfoVRequest(IWitRequestConfiguration configuration, bool useServerToken = true) : base(configuration, useServerToken) {}
 
         // Get all apps & return the current app info
         public bool RequestAppId(RequestCompleteDelegate<string> onComplete,
@@ -25,7 +25,7 @@ namespace Meta.WitAi.Requests
             Dictionary<string, string> uriParameters = new Dictionary<string, string>();
             uriParameters[WitEditorConstants.ENDPOINT_APPS_LIMIT] = 10000.ToString();
             uriParameters[WitEditorConstants.ENDPOINT_APPS_OFFSET] = 0.ToString();
-            return RequestWitGet<WitResponseNode>(WitEditorConstants.ENDPOINT_APPS, uriParameters, (results, error) =>
+            return RequestWit<WitResponseNode>(WitEditorConstants.ENDPOINT_APPS, uriParameters, (results, error) =>
             {
                 if (string.IsNullOrEmpty(error) && results != null)
                 {
@@ -56,7 +56,7 @@ namespace Meta.WitAi.Requests
             Dictionary<string, string> uriParameters = new Dictionary<string, string>();
             uriParameters[WitEditorConstants.ENDPOINT_APPS_LIMIT] = Mathf.Max(limit, 1).ToString();
             uriParameters[WitEditorConstants.ENDPOINT_APPS_OFFSET] = Mathf.Max(offset, 0).ToString();
-            return RequestWitGet<WitAppInfo[]>(WitEditorConstants.ENDPOINT_APPS, uriParameters, onComplete, onProgress);
+            return RequestWit<WitAppInfo[]>(WitEditorConstants.ENDPOINT_APPS, uriParameters, onComplete, onProgress);
         }
 
         // Get app info request
@@ -64,7 +64,7 @@ namespace Meta.WitAi.Requests
             RequestCompleteDelegate<WitAppInfo> onComplete,
             RequestProgressDelegate onProgress = null)
         {
-            return RequestWitGet<WitAppInfo>($"{WitEditorConstants.ENDPOINT_APPS}/{applicationId}", null,
+            return RequestWit<WitAppInfo>($"{WitEditorConstants.ENDPOINT_APPS}/{applicationId}", null,
                 onComplete, onProgress);
         }
 
@@ -73,12 +73,8 @@ namespace Meta.WitAi.Requests
             RequestCompleteDelegate<string> onComplete,
             RequestProgressDelegate onProgress = null)
         {
-            var jsonNode = new WitResponseClass()
-            {
-                { "refresh", "false" }
-            };
-            return RequestWitPost<WitResponseNode>($"{WitEditorConstants.ENDPOINT_APPS}/{applicationId}/{WitEditorConstants.ENDPOINT_CLIENTTOKENS}",
-                null, jsonNode.ToString(),
+            return RequestWit<WitResponseNode>($"{WitEditorConstants.ENDPOINT_APPS}/{applicationId}/{WitEditorConstants.ENDPOINT_CLIENTTOKENS}",
+                null, "{\"refresh\":false}",
                 (results, error) =>
                 {
                     if (string.IsNullOrEmpty(error))
@@ -100,7 +96,7 @@ namespace Meta.WitAi.Requests
         public bool RequestIntentList(RequestCompleteDelegate<WitIntentInfo[]> onComplete,
             RequestProgressDelegate onProgress = null)
         {
-            return RequestWitGet<WitIntentInfo[]>(WitEditorConstants.ENDPOINT_INTENTS, null,
+            return RequestWit<WitIntentInfo[]>(WitEditorConstants.ENDPOINT_INTENTS, null,
                 onComplete, onProgress);
         }
 
@@ -109,7 +105,7 @@ namespace Meta.WitAi.Requests
             RequestCompleteDelegate<WitIntentInfo> onComplete,
             RequestProgressDelegate onProgress = null)
         {
-            return RequestWitGet<WitIntentInfo>($"{WitEditorConstants.ENDPOINT_INTENTS}/{intentId}", null,
+            return RequestWit<WitIntentInfo>($"{WitEditorConstants.ENDPOINT_INTENTS}/{intentId}", null,
                 onComplete, onProgress);
         }
 
@@ -117,7 +113,7 @@ namespace Meta.WitAi.Requests
         public bool RequestEntityList(RequestCompleteDelegate<WitEntityInfo[]> onComplete,
             RequestProgressDelegate onProgress = null)
         {
-            return RequestWitGet<WitEntityInfo[]>(WitEditorConstants.ENDPOINT_ENTITIES, null,
+            return RequestWit<WitEntityInfo[]>(WitEditorConstants.ENDPOINT_ENTITIES, null,
                 onComplete, onProgress);
         }
 
@@ -126,7 +122,7 @@ namespace Meta.WitAi.Requests
             RequestCompleteDelegate<WitEntityInfo> onComplete,
             RequestProgressDelegate onProgress = null)
         {
-            return RequestWitGet<WitEntityInfo>($"{WitEditorConstants.ENDPOINT_ENTITIES}/{entityId}", null, onComplete,
+            return RequestWit<WitEntityInfo>($"{WitEditorConstants.ENDPOINT_ENTITIES}/{entityId}", null, onComplete,
                 onProgress);
         }
 
@@ -134,7 +130,7 @@ namespace Meta.WitAi.Requests
         public bool RequestTraitList(RequestCompleteDelegate<WitTraitInfo[]> onComplete,
             RequestProgressDelegate onProgress = null)
         {
-            return RequestWitGet<WitTraitInfo[]>(WitEditorConstants.ENDPOINT_TRAITS, null, onComplete,
+            return RequestWit<WitTraitInfo[]>(WitEditorConstants.ENDPOINT_TRAITS, null, onComplete,
                 onProgress);
         }
 
@@ -143,7 +139,7 @@ namespace Meta.WitAi.Requests
             RequestCompleteDelegate<WitTraitInfo> onComplete,
             RequestProgressDelegate onProgress = null)
         {
-            return RequestWitGet<WitTraitInfo>($"{WitEditorConstants.ENDPOINT_TRAITS}/{traitId}", null,
+            return RequestWit<WitTraitInfo>($"{WitEditorConstants.ENDPOINT_TRAITS}/{traitId}", null,
                 onComplete, onProgress);
         }
 
@@ -151,7 +147,7 @@ namespace Meta.WitAi.Requests
         public bool RequestVoiceList(RequestCompleteDelegate<Dictionary<string, WitVoiceInfo[]>> onComplete,
             RequestProgressDelegate onProgress = null)
         {
-            return RequestWitGet<Dictionary<string, WitVoiceInfo[]>>(WitEditorConstants.ENDPOINT_TTS_VOICES, null, onComplete,
+            return RequestWit<Dictionary<string, WitVoiceInfo[]>>(WitEditorConstants.ENDPOINT_TTS_VOICES, null, onComplete,
                 onProgress);
         }
     }

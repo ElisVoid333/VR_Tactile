@@ -25,61 +25,61 @@ using System.Linq;
 
 internal class OVRConfigurationTaskUpdater : OVRConfigurationTaskProcessor
 {
-    public override int AllocatedTimeInMs => 10;
-    private readonly OVRConfigurationTaskUpdaterSummary _summary;
+	public override int AllocatedTimeInMs => 10;
+	private readonly OVRConfigurationTaskUpdaterSummary _summary;
+	protected override Func<IEnumerable<OVRConfigurationTask>, List<OVRConfigurationTask>> OpenTasksFilter =>
+		(Func<IEnumerable<OVRConfigurationTask>, List<OVRConfigurationTask>>)(tasksToFilter => tasksToFilter
+		.Where(task => !task.IsIgnored(BuildTargetGroup))
+		.ToList());
 
-    protected override Func<IEnumerable<OVRConfigurationTask>, List<OVRConfigurationTask>> OpenTasksFilter =>
-        (Func<IEnumerable<OVRConfigurationTask>, List<OVRConfigurationTask>>)(tasksToFilter => tasksToFilter
-            .Where(task => !task.IsIgnored(BuildTargetGroup))
-            .ToList());
+	public override ProcessorType Type => ProcessorType.Updater;
+	public OVRConfigurationTaskUpdaterSummary Summary => _summary;
 
-    public override ProcessorType Type => ProcessorType.Updater;
-    public OVRConfigurationTaskUpdaterSummary Summary => _summary;
+	public OVRConfigurationTaskUpdater(
+		OVRConfigurationTaskRegistry registry,
+		BuildTargetGroup buildTargetGroup,
+		Func<IEnumerable<OVRConfigurationTask>, List<OVRConfigurationTask>> filter,
+		OVRProjectSetup.LogMessages logMessages,
+		bool blocking,
+		Action<OVRConfigurationTaskProcessor> onCompleted)
+		: base(registry, buildTargetGroup, filter, logMessages, blocking, onCompleted)
+	{
+		_summary = new OVRConfigurationTaskUpdaterSummary(BuildTargetGroup);
+	}
 
-    public OVRConfigurationTaskUpdater(
-        OVRConfigurationTaskRegistry registry,
-        BuildTargetGroup buildTargetGroup,
-        Func<IEnumerable<OVRConfigurationTask>, List<OVRConfigurationTask>> filter,
-        OVRProjectSetup.LogMessages logMessages,
-        bool blocking,
-        Action<OVRConfigurationTaskProcessor> onCompleted)
-        : base(registry, buildTargetGroup, filter, logMessages, blocking, onCompleted)
-    {
-        _summary = new OVRConfigurationTaskUpdaterSummary(BuildTargetGroup);
-    }
+	protected override void PrepareTasks()
+	{
+		_summary.Reset();
+		base.PrepareTasks();
+	}
 
-    protected override void PrepareTasks()
-    {
-        _summary.Reset();
-        base.PrepareTasks();
-    }
+	protected override void ProcessTask(OVRConfigurationTask task)
+	{
+		var changedState = task.UpdateAndGetStateChanged(BuildTargetGroup);
 
-    protected override void ProcessTask(OVRConfigurationTask task)
-    {
-        var changedState = task.UpdateAndGetStateChanged(BuildTargetGroup);
-        Summary.AddTask(task, changedState);
+		if (task.IsDone(BuildTargetGroup))
+		{
+			return;
+		}
 
-        if (task.IsDone(BuildTargetGroup))
-        {
-            return;
-        }
+		if (LogMessages == OVRProjectSetup.LogMessages.All
+		    || (LogMessages == OVRProjectSetup.LogMessages.Changed && changedState))
+		{
+			task.LogMessage(BuildTargetGroup);
+		}
 
-        if (LogMessages == OVRProjectSetup.LogMessages.All
-            || (LogMessages == OVRProjectSetup.LogMessages.Changed && changedState))
-        {
-            task.LogMessage(BuildTargetGroup);
-        }
-    }
+		Summary.AddTask(task, changedState);
+	}
 
-    public override void Complete()
-    {
-        Summary.Validate();
+	public override void Complete()
+	{
+		Summary.Validate();
 
-        if (LogMessages >= OVRProjectSetup.LogMessages.Summary)
-        {
-            Summary.Log();
-        }
+		if (LogMessages >= OVRProjectSetup.LogMessages.Summary)
+		{
+			Summary.Log();
+		}
 
-        base.Complete();
-    }
+		base.Complete();
+	}
 }

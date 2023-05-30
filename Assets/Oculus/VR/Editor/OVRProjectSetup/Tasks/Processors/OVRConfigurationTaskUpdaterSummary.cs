@@ -19,17 +19,14 @@
  */
 
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 internal class OVRConfigurationTaskUpdaterSummary
 {
-    private readonly List<OVRConfigurationTask> _doneTasks;
     private readonly List<OVRConfigurationTask> _outstandingTasks;
     private readonly Dictionary<OVRProjectSetup.TaskLevel, List<OVRConfigurationTask>> _outstandingTasksPerLevel;
-    private bool HasNewOutstandingTasks { get; set; }
-    private bool HasAnyChange { get; set; }
+    private bool HasChangedState { get; set; }
 
     public bool HasAvailableFixes => _outstandingTasks.Count > 0;
     public bool HasFixes(OVRProjectSetup.TaskLevel taskLevel) => _outstandingTasksPerLevel[taskLevel].Count > 0;
@@ -42,7 +39,6 @@ internal class OVRConfigurationTaskUpdaterSummary
     public OVRConfigurationTaskUpdaterSummary(BuildTargetGroup buildTargetGroup)
     {
         _buildTargetGroup = buildTargetGroup;
-        _doneTasks = new List<OVRConfigurationTask>();
         _outstandingTasks = new List<OVRConfigurationTask>();
         _outstandingTasksPerLevel = new Dictionary<OVRProjectSetup.TaskLevel, List<OVRConfigurationTask>>();
         for (var i = OVRProjectSetup.TaskLevel.Required; i >= OVRProjectSetup.TaskLevel.Optional; i--)
@@ -53,67 +49,24 @@ internal class OVRConfigurationTaskUpdaterSummary
 
     public void Reset()
     {
-        _doneTasks.Clear();
         _outstandingTasks.Clear();
         for (var i = OVRProjectSetup.TaskLevel.Required; i >= OVRProjectSetup.TaskLevel.Optional; i--)
         {
             _outstandingTasksPerLevel[i].Clear();
         }
 
-        HasNewOutstandingTasks = false;
-        HasAnyChange = false;
+        HasChangedState = false;
     }
 
     public void AddTask(OVRConfigurationTask task, bool changedState)
     {
-        if (task.IsDone(_buildTargetGroup))
-        {
-            _doneTasks.Add(task);
-        }
-        else
-        {
-            _outstandingTasks.Add(task);
-            _outstandingTasksPerLevel[task.Level.GetValue(_buildTargetGroup)].Add(task);
-            HasNewOutstandingTasks |= changedState;
-        }
-
-        HasAnyChange |= changedState;
+        _outstandingTasks.Add(task);
+        _outstandingTasksPerLevel[task.Level.GetValue(_buildTargetGroup)].Add(task);
+        HasChangedState |= changedState;
     }
 
     public void Validate()
     {
-        if (HasAnyChange)
-        {
-            LogEvent();
-        }
-
-        var interactionFlowEvent = OVRProjectSetupSettingsProvider.InteractionFlowEvent;
-        if (interactionFlowEvent == null)
-        {
-            if (GetTotalNumberOfFixes() > 0)
-            {
-                interactionFlowEvent = OVRProjectSetupTelemetryEvent
-                    .Start(OVRProjectSetupTelemetryEvent.EventTypes.InteractionFlow)
-                    .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.Level, HighestFixLevel?.ToString() ?? "None")
-                    .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.Count,
-                        GetNumberOfFixes(HighestFixLevel ?? OVRProjectSetup.TaskLevel.Required).ToString())
-                    .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.Level,
-                        HighestFixLevel?.ToString() ?? "None")
-                    .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.Value, GetTotalNumberOfFixes().ToString())
-                    .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.BuildTargetGroup,
-                        BuildTargetGroup.ToString());
-
-                OVRProjectSetupSettingsProvider.InteractionFlowEvent = interactionFlowEvent;
-            }
-        }
-        else
-        {
-            interactionFlowEvent.AddAnnotation(
-                    OVRProjectSetupTelemetryEvent.AnnotationTypes.BuildTargetGroupAfter,
-                    BuildTargetGroup.ToString())
-                .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.ValueAfter,
-                    GetTotalNumberOfFixes().ToString());
-        }
     }
 
     public OVRProjectSetup.TaskLevel? HighestFixLevel
@@ -132,17 +85,6 @@ internal class OVRConfigurationTaskUpdaterSummary
         }
     }
 
-    public string GenerateReport(string outputPath = null, string fileName = null)
-    {
-        var sortedTasks = _outstandingTasks.Concat(_doneTasks);
-        return OVRProjectSetupReport.GenerateJson(
-            sortedTasks,
-            _buildTargetGroup,
-            outputPath,
-            fileName
-        );
-    }
-
     public string ComputeNoticeMessage()
     {
         var highestLevel = HighestFixLevel;
@@ -150,12 +92,12 @@ internal class OVRConfigurationTaskUpdaterSummary
         var count = GetNumberOfFixes(level);
         if (count == 0)
         {
-            return $"Oculus-Ready for {_buildTargetGroup}";
+	        return $"Oculus-Ready for {_buildTargetGroup}";
         }
         else
         {
-            var message = GetLogMessage(level, count);
-            return message;
+	        var message = GetLogMessage(level, count);
+	        return message;
         }
     }
 
@@ -168,21 +110,9 @@ internal class OVRConfigurationTaskUpdaterSummary
         return message;
     }
 
-    public void LogEvent()
-    {
-        OVRProjectSetupTelemetryEvent.Start(OVRProjectSetupTelemetryEvent.EventTypes.Summary)
-            .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.Level, HighestFixLevel?.ToString() ?? "None")
-            .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.Count,
-                GetNumberOfFixes(HighestFixLevel ?? OVRProjectSetup.TaskLevel.Required).ToString())
-            .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.BuildTargetGroup, BuildTargetGroup.ToString())
-            .AddAnnotation(OVRProjectSetupTelemetryEvent.AnnotationTypes.Value, GetTotalNumberOfFixes().ToString())
-            .Send();
-    }
-
-
     public void Log()
     {
-        if (!HasNewOutstandingTasks)
+        if (!HasChangedState)
         {
             return;
         }
@@ -215,7 +145,7 @@ internal class OVRConfigurationTaskUpdaterSummary
                     Debug.LogWarning(message);
                 }
             }
-                break;
+            break;
         }
     }
 

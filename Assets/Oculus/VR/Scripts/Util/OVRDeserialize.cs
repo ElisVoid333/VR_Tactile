@@ -22,7 +22,6 @@ using System;
 using System.Runtime.InteropServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
-using static OVRPlugin;
 
 //-------------------------------------------------------------------------------------
 /// <summary>
@@ -30,7 +29,7 @@ using static OVRPlugin;
 /// </summary>
 internal static class OVRDeserialize
 {
-    public static T ByteArrayToStructure<T>(byte[] bytes) where T : struct
+    public static T ByteArrayToStructure<T>(byte[] bytes) where T: struct
     {
         T stuff;
         GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
@@ -42,7 +41,6 @@ internal static class OVRDeserialize
         {
             handle.Free();
         }
-
         return stuff;
     }
 
@@ -68,7 +66,6 @@ internal static class OVRDeserialize
         public UInt64 RequestId;
         public int Result;
     }
-
 
 
     public struct SpatialAnchorCreateCompleteData

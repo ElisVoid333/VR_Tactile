@@ -1,257 +1,168 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PassthroughStyler : MonoBehaviour
 {
-    private const float FadeDuration = 0.2f;
+    public OVRInput.Controller controllerHand = OVRInput.Controller.None;
+    public OVRPassthroughLayer passthroughLayer;
+    IEnumerator fadeIn;
+    IEnumerator fadeOut;
 
-    [SerializeField]
-    private OVRInput.Controller _controllerHand = OVRInput.Controller.None;
-    [SerializeField]
-    private OVRPassthroughLayer _passthroughLayer;
-    [SerializeField]
-    private RectTransform _colorWheel;
-    [SerializeField]
-    private Texture2D _colorTexture;
-    [SerializeField]
-    private Texture2D _colorLutTexture;
-    [SerializeField]
-    private CanvasGroup _mainCanvas;
-    [SerializeField]
-    private GameObject[] _compactObjects;
-    [SerializeField]
-    private GameObject[] _objectsToHideForColorPassthrough;
+    public RectTransform[] menuOptions;
+    public RectTransform colorWheel;
+    public Texture2D colorTexture;
+    Vector3 cursorPosition = Vector3.zero;
 
-    private Vector3 _cursorPosition = Vector3.zero;
-    private bool _settingColor = false;
-    private Color _savedColor = Color.white;
-    private float _savedBrightness = 0.0f;
-    private float _savedContrast = 0.0f;
-    private float _savedSaturation = 0.0f;
-    private OVRPassthroughLayer.ColorMapEditorType _currentStyle = OVRPassthroughLayer.ColorMapEditorType.ColorAdjustment;
-    private float _savedBlend = 1;
-    private OVRPassthroughColorLut _passthroughColorLut;
-    private IEnumerator _fade;
+    bool settingColor = false;
+    Color savedColor = Color.white;
+    float savedBrightness = 0.0f;
+    float savedContrast = 0.0f;
 
-    private void Start()
+    public CanvasGroup mainCanvas;
+
+    public GameObject[] compactObjects;
+
+    void Start()
     {
-        if (TryGetComponent<GrabObject>(out var grabOject))
+        if (GetComponent<GrabObject>())
         {
-            grabOject.GrabbedObjectDelegate += Grab;
-            grabOject.ReleasedObjectDelegate += Release;
-            grabOject.CursorPositionDelegate += Cursor;
+            GetComponent<GrabObject>().GrabbedObjectDelegate += Grab;
+            GetComponent<GrabObject>().ReleasedObjectDelegate += Release;
+            GetComponent<GrabObject>().CursorPositionDelegate += Cursor;
         }
-        _savedColor = new Color(1, 1, 1, 0);
+        savedColor = new Color(1, 1, 1, 0);
         ShowFullMenu(false);
-        _mainCanvas.interactable = false;
-        _passthroughColorLut = new OVRPassthroughColorLut(_colorLutTexture);
-
-        if (!OVRManager.GetPassthroughCapabilities().SupportsColorPassthrough)
-        {
-            if (_objectsToHideForColorPassthrough != null)
-            {
-                for (int i = 0; i < _objectsToHideForColorPassthrough.Length; i++)
-                {
-                    _objectsToHideForColorPassthrough[i].SetActive(false);
-                }
-            }
-        }
+        mainCanvas.interactable = false;
+        passthroughLayer.colorMapEditorType = OVRPassthroughLayer.ColorMapEditorType.ColorAdjustment;
     }
 
-    private void Update()
+    void Update()
     {
-        if (_controllerHand == OVRInput.Controller.None)
+        if (controllerHand == OVRInput.Controller.None)
         {
             return;
         }
-        if (_settingColor)
+        if (settingColor)
         {
             GetColorFromWheel();
         }
     }
 
-    /// <summary>
-    /// Called from editor
-    /// </summary>
-    public void OnBrightnessChanged(float newValue)
+    public void Grab(OVRInput.Controller grabHand)
     {
-        _savedBrightness = newValue;
-        UpdateBrighnessContrastSaturation();
-    }
-
-    /// <summary>
-    /// Called from editor
-    /// </summary>
-    public void OnContrastChanged(float newValue)
-    {
-        _savedContrast = newValue;
-        UpdateBrighnessContrastSaturation();
-    }
-
-    /// <summary>
-    /// Called from editor
-    /// </summary>
-    public void OnSaturationChanged(float newValue)
-    {
-        _savedSaturation = newValue;
-        UpdateBrighnessContrastSaturation();
-    }
-
-    /// <summary>
-    /// Called from editor
-    /// </summary>
-    public void OnAlphaChanged(float newValue)
-    {
-        _savedColor = new Color(_savedColor.r, _savedColor.g, _savedColor.b, newValue);
-        _passthroughLayer.edgeColor = _savedColor;
-    }
-
-    /// <summary>
-    /// Called from editor
-    /// </summary>
-    public void OnBlendChange(float newValue)
-    {
-        _savedBlend = newValue;
-        _passthroughLayer.SetColorLut(_passthroughColorLut, _savedBlend);
-    }
-
-    /// <summary>
-    /// Called from editor
-    /// </summary>
-    public void DoColorDrag(bool doDrag)
-    {
-        _settingColor = doDrag;
-    }
-
-    /// <summary>
-    /// Called from editor
-    /// </summary>
-    public void SetPassthroughStyleToColorAdjustment(bool isOn)
-    {
-        if (isOn)
-        {
-            SetPassthroughStyle(OVRPassthroughLayer.ColorMapEditorType.ColorAdjustment);
-        }
-    }
-
-    /// <summary>
-    /// Called from editor
-    /// </summary>
-    public void SetPassthroughStyleToColorLut(bool isOn)
-    {
-        if (isOn)
-        {
-            SetPassthroughStyle(OVRPassthroughLayer.ColorMapEditorType.ColorLut);
-        }
-    }
-
-    private void Grab(OVRInput.Controller grabHand)
-    {
-        _controllerHand = grabHand;
+        controllerHand = grabHand;
         ShowFullMenu(true);
-        if (_mainCanvas) _mainCanvas.interactable = true;
+        if (mainCanvas) mainCanvas.interactable = true;
 
-        if (_fade != null) StopCoroutine(_fade);
-        _fade = FadeToCurrentStyle(FadeDuration);
-        StartCoroutine(_fade);
+        if (fadeIn != null) StopCoroutine(fadeIn);
+        if (fadeOut != null) StopCoroutine(fadeOut);
+        fadeIn = FadeToCurrentStyle(0.2f);
+        StartCoroutine(fadeIn);
     }
 
-    private void Release()
+    public void Release()
     {
-        _controllerHand = OVRInput.Controller.None;
+        controllerHand = OVRInput.Controller.None;
         ShowFullMenu(false);
-        if (_mainCanvas) _mainCanvas.interactable = false;
+        if (mainCanvas) mainCanvas.interactable = false;
 
-        if (_fade != null) StopCoroutine(_fade);
-        _fade = FadeToDefaultPassthrough(FadeDuration);
-        StartCoroutine(_fade);
+        if (fadeIn != null) StopCoroutine(fadeIn);
+        if (fadeOut != null) StopCoroutine(fadeOut);
+        fadeOut = FadeToDefaultPassthrough(0.2f);
+        StartCoroutine(fadeOut);
     }
 
-    private IEnumerator FadeToCurrentStyle(float fadeTime)
-    {
-        _passthroughLayer.edgeRenderingEnabled = true;
-        yield return FadeTo(1, fadeTime);
-    }
-
-    private IEnumerator FadeToDefaultPassthrough(float fadeTime)
-    {
-        yield return FadeTo(0, fadeTime);
-        _passthroughLayer.edgeRenderingEnabled = false;
-    }
-
-    private IEnumerator FadeTo(float styleValueMultiplier, float duration)
+    IEnumerator FadeToCurrentStyle(float fadeTime)
     {
         float timer = 0.0f;
-        float brightness = _passthroughLayer.colorMapEditorBrightness;
-        float contrast = _passthroughLayer.colorMapEditorContrast;
-        float saturation = _passthroughLayer.colorMapEditorSaturation;
-        Color edgeCol = _passthroughLayer.edgeColor;
-        float blend = _savedBlend;
-        while (timer <= duration)
+        float brightness = passthroughLayer.colorMapEditorBrightness;
+        float contrast = passthroughLayer.colorMapEditorContrast;
+        Color edgeCol = new Color(savedColor.r, savedColor.g, savedColor.b, 0.0f);
+        passthroughLayer.edgeRenderingEnabled = true;
+        while (timer <= fadeTime)
         {
             timer += Time.deltaTime;
-            float normTimer = Mathf.Clamp01(timer / duration);
-            if (_currentStyle == OVRPassthroughLayer.ColorMapEditorType.ColorLut)
-            {
-                _passthroughLayer.SetColorLut(_passthroughColorLut, Mathf.Lerp(blend, _savedBlend * styleValueMultiplier, normTimer));
-            }
-            else
-            {
-                _passthroughLayer.SetBrightnessContrastSaturation(
-                    Mathf.Lerp(brightness, _savedBrightness * styleValueMultiplier, normTimer),
-                    Mathf.Lerp(contrast, _savedContrast * styleValueMultiplier, normTimer),
-                    Mathf.Lerp(saturation, _savedSaturation * styleValueMultiplier, normTimer));
-            }
-            _passthroughLayer.edgeColor = Color.Lerp(edgeCol, new Color(_savedColor.r, _savedColor.g, _savedColor.b, _savedColor.a * styleValueMultiplier), normTimer);
+            float normTimer = Mathf.Clamp01(timer / fadeTime);
+            passthroughLayer.colorMapEditorBrightness = Mathf.Lerp(brightness, savedBrightness, normTimer);
+            passthroughLayer.colorMapEditorContrast = Mathf.Lerp(contrast, savedContrast, normTimer);
+            passthroughLayer.edgeColor = Color.Lerp(edgeCol, savedColor, normTimer);
             yield return null;
         }
     }
 
-    private void UpdateBrighnessContrastSaturation()
+    IEnumerator FadeToDefaultPassthrough(float fadeTime)
     {
-        _passthroughLayer.SetBrightnessContrastSaturation(_savedBrightness, _savedContrast, _savedSaturation);
+        float timer = 0.0f;
+        float brightness = passthroughLayer.colorMapEditorBrightness;
+        float contrast = passthroughLayer.colorMapEditorContrast;
+        Color edgeCol = passthroughLayer.edgeColor;
+        while (timer <= fadeTime)
+        {
+            timer += Time.deltaTime;
+            float normTimer = Mathf.Clamp01(timer / fadeTime);
+            passthroughLayer.colorMapEditorBrightness = Mathf.Lerp(brightness, 0.0f, normTimer);
+            passthroughLayer.colorMapEditorContrast = Mathf.Lerp(contrast, 0.0f, normTimer);
+            passthroughLayer.edgeColor = Color.Lerp(edgeCol, new Color(edgeCol.r, edgeCol.g, edgeCol.b, 0.0f), normTimer);
+            if (timer > fadeTime)
+            {
+                passthroughLayer.edgeRenderingEnabled = false;
+            }
+            yield return null;
+        }
     }
 
-    private void ShowFullMenu(bool doShow)
+    public void OnBrightnessChanged(float newValue)
     {
-        foreach (GameObject go in _compactObjects)
+        savedBrightness = newValue;
+        passthroughLayer.colorMapEditorBrightness = savedBrightness;
+    }
+
+    public void OnContrastChanged(float newValue)
+    {
+        savedContrast = newValue;
+        passthroughLayer.colorMapEditorContrast = savedContrast;
+    }
+
+    public void OnAlphaChanged(float newValue)
+    {
+        savedColor = new Color(savedColor.r, savedColor.g, savedColor.b, newValue);
+        passthroughLayer.edgeColor = savedColor;
+    }
+
+    void ShowFullMenu(bool doShow)
+    {
+        foreach (GameObject go in compactObjects)
         {
             go.SetActive(doShow);
         }
     }
 
-    private void Cursor(Vector3 cP)
+    public void Cursor(Vector3 cP)
     {
-        _cursorPosition = cP;
+        cursorPosition = cP;
     }
 
-    private void GetColorFromWheel()
+    public void DoColorDrag(bool doDrag)
+    {
+        settingColor = doDrag;
+    }
+
+    public void GetColorFromWheel()
     {
         // convert cursor world position to UV
-        var localPos = _colorWheel.transform.InverseTransformPoint(_cursorPosition);
-        var toImg = new Vector2(localPos.x / _colorWheel.sizeDelta.x + 0.5f, localPos.y / _colorWheel.sizeDelta.y + 0.5f);
+        var localPos = colorWheel.transform.InverseTransformPoint(cursorPosition);
+        var toImg = new Vector2(localPos.x / colorWheel.sizeDelta.x + 0.5f, localPos.y / colorWheel.sizeDelta.y + 0.5f);
         Debug.Log("Sanctuary: " + toImg.x.ToString() + ", " + toImg.y.ToString());
         Color sampledColor = Color.black;
         if (toImg.x < 1.0 && toImg.x > 0.0f && toImg.y < 1.0 && toImg.y > 0.0f)
         {
-            int Upos = Mathf.RoundToInt(toImg.x * _colorTexture.width);
-            int Vpos = Mathf.RoundToInt(toImg.y * _colorTexture.height);
-            sampledColor = _colorTexture.GetPixel(Upos, Vpos);
+            int Upos = Mathf.RoundToInt(toImg.x * colorTexture.width);
+            int Vpos = Mathf.RoundToInt(toImg.y * colorTexture.height);
+            sampledColor = colorTexture.GetPixel(Upos, Vpos);
         }
-        _savedColor = new Color(sampledColor.r, sampledColor.g, sampledColor.b, _savedColor.a);
-        _passthroughLayer.edgeColor = _savedColor;
-    }
-
-    private void SetPassthroughStyle(OVRPassthroughLayer.ColorMapEditorType passthroughStyle)
-    {
-        _currentStyle = passthroughStyle;
-        if (_currentStyle == OVRPassthroughLayer.ColorMapEditorType.ColorLut)
-        {
-            _passthroughLayer.SetColorLut(_passthroughColorLut, _savedBlend);
-        }
-        else
-        {
-            UpdateBrighnessContrastSaturation();
-        }
+        savedColor = new Color(sampledColor.r, sampledColor.g, sampledColor.b, savedColor.a);
+        passthroughLayer.edgeColor = savedColor;
     }
 }

@@ -300,17 +300,6 @@ namespace Oculus.Interaction
             return closestInteractable;
         }
 
-        protected override int ComputeCandidateTiebreaker(PokeInteractable a, PokeInteractable b)
-        {
-            int result = base.ComputeCandidateTiebreaker(a, b);
-            if (result != 0)
-            {
-                return result;
-            }
-
-            return a.TiebreakerScore.CompareTo(b.TiebreakerScore);
-        }
-
         private PokeInteractable ComputeSelectCandidate()
         {
             PokeInteractable closestInteractable = null;
@@ -409,7 +398,7 @@ namespace Oculus.Interaction
 
                         if (normalDistanceEqual)
                         {
-                            if (ComputeCandidateTiebreaker(interactable, closestInteractable) > 0)
+                            if (interactable.TiebreakerScore > closestInteractable.TiebreakerScore)
                             {
                                 closestNormalDistance = normalDistance;
                                 closestTangentDistance = tangentDistance;
@@ -423,8 +412,7 @@ namespace Oculus.Interaction
                             continue;
                         }
 
-                        if (closestInteractable == null ||
-                            normalDistance < closestNormalDistance - closestInteractable.CloseDistanceThreshold)
+                        if (normalDistance < closestNormalDistance - interactable.CloseDistanceThreshold)
                         {
                             closestNormalDistance = normalDistance;
                             closestTangentDistance = tangentDistance;
@@ -494,7 +482,7 @@ namespace Oculus.Interaction
 
                     if (Mathf.Abs(normalDistance) < _equalDistanceThreshold)
                     {
-                        if (ComputeCandidateTiebreaker(closestInteractable, interactable) > 0)
+                        if (closestInteractable.TiebreakerScore > interactable.TiebreakerScore)
                         {
                             continue;
                         }
@@ -624,7 +612,8 @@ namespace Oculus.Interaction
                         if (normalDistanceEqual)
                         {
                             // Select this interactable if its tiebreakerscore is highest
-                            if (closestInteractable != null && ComputeCandidateTiebreaker(interactable, closestInteractable) > 0)
+                            if (closestInteractable != null && interactable.TiebreakerScore >
+                                closestInteractable.TiebreakerScore)
                             {
                                 closestInteractable = interactable;
                                 closestNormalDistance = normalDistance;
@@ -633,16 +622,18 @@ namespace Oculus.Interaction
                             }
                         }
 
+                        float closeThreshold = interactable.CloseDistanceThreshold;
+                        bool normalDistanceClose =
+                            Mathf.Abs(normalDistance - closestNormalDistance) < closeThreshold;
+
                         // If normal distance is greater than closest normal distance by over closeDistanceThreshold
-                        if (normalDistance > closestNormalDistance + interactable.CloseDistanceThreshold)
+                        if (normalDistance > closestNormalDistance + closeThreshold)
                         {
                             continue;
                         }
 
                         // If normal distance is less than closest normal distance by over closeDistanceThreshold
-                        // of the best closest interactable's close distance threshold
-                        if(closestInteractable == null || normalDistance < closestNormalDistance -
-                            closestInteractable.CloseDistanceThreshold)
+                        if(normalDistance < closestNormalDistance - closeThreshold)
                         {
                             closestInteractable = interactable;
                             closestNormalDistance = normalDistance;
@@ -751,7 +742,7 @@ namespace Oculus.Interaction
             Vector3 projOnNormal = Vector3.Dot(proximityToPoint, backingHit.Normal) *
                 backingHit.Normal;
             Vector3 lateralVec = proximityToPoint - projOnNormal;
-            return lateralVec.magnitude - _radius;
+            return Mathf.Max(lateralVec.magnitude - _radius, 0f);
         }
 
         // Returns if poke origin is still considered to be within the surface.

@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Unity.Collections;
 using UnityEngine;
@@ -29,7 +28,7 @@ namespace Oculus.Interaction
     public struct TubePoint
     {
         public Vector3 position;
-        public Quaternion rotation;
+        public Vector3 direction;
         public float relativeLength;
     }
 
@@ -52,21 +51,6 @@ namespace Oculus.Interaction
         private MeshRenderer _renderer;
         [SerializeField]
         private int _divisions = 6;
-        [SerializeField]
-        private int _bevel = 4;
-        [SerializeField]
-        private int _renderQueue = -1;
-        public int RenderQueue
-        {
-            get
-            {
-                return _renderQueue;
-            }
-            set
-            {
-                _renderQueue = value;
-            }
-        }
 
         [SerializeField]
         private float _radius = 0.005f;
@@ -122,20 +106,8 @@ namespace Oculus.Interaction
                 _progressFade = value;
             }
         }
-        [SerializeField]
-        private float _startFadeThresold = 0.2f;
-        public float StartFadeThresold
-        {
-            get
-            {
-                return _startFadeThresold;
-            }
-            set
-            {
-                _startFadeThresold = value;
-            }
-        }
-        [SerializeField]
+
+        [SerializeField, Range(0f, 1f)]
         private float _endFadeThresold = 0.2f;
         public float EndFadeThresold
         {
@@ -146,32 +118,6 @@ namespace Oculus.Interaction
             set
             {
                 _endFadeThresold = value;
-            }
-        }
-        [SerializeField]
-        private bool _invertThreshold = false;
-        public bool InvertThreshold
-        {
-            get
-            {
-                return _invertThreshold;
-            }
-            set
-            {
-                _invertThreshold = value;
-            }
-        }
-        [SerializeField]
-        private float _feather = 0.2f;
-        public float Feather
-        {
-            get
-            {
-                return _feather;
-            }
-            set
-            {
-                _feather = value;
             }
         }
 
@@ -197,9 +143,6 @@ namespace Oculus.Interaction
         private Mesh _mesh;
         private int[] _tris;
         private int _initializedSteps = -1;
-
-        private static readonly int _fadeLimitsShaderID = Shader.PropertyToID("_FadeLimit");
-        private static readonly int _fadeSignShaderID = Shader.PropertyToID("_FadeSign");
 
         #region Editor events
 
@@ -229,6 +172,7 @@ namespace Oculus.Interaction
             _renderer.enabled = false;
         }
 
+
         public void RenderTube(TubePoint[] points)
         {
             int steps = points.Length;
@@ -237,9 +181,8 @@ namespace Oculus.Interaction
                 InitializeMeshData(steps);
                 _initializedSteps = steps;
             }
-            UpdateMeshData(points);
+            UpdateMeshData(points, _divisions, _radius, _tint);
             _renderer.enabled = true;
-            _renderer.material.renderQueue = _renderQueue;
         }
 
         public void Hide()
@@ -249,10 +192,6 @@ namespace Oculus.Interaction
 
         private void InitializeMeshData(int steps)
         {
-            if (_vertsData.IsCreated)
-            {
-                _vertsData.Dispose();
-            }
             _dataLayout = new VertexAttributeDescriptor[]
             {
                 new VertexAttributeDescriptor(VertexAttribute.Position, VertexAttributeFormat.Float32, 3),
@@ -260,7 +199,7 @@ namespace Oculus.Interaction
                 new VertexAttributeDescriptor(VertexAttribute.TexCoord0, VertexAttributeFormat.Float32, 2),
             };
 
-            int vertsCount = SetVertexCount(steps, _divisions, _bevel);
+            int vertsCount = SetVertexCount(steps, _divisions);
             _vertsData = new NativeArray<VertexLayout>(vertsCount, Allocator.Persistent);
             _mesh = new Mesh();
             _mesh.SetVertexBufferParams(vertsCount, _dataLayout);
@@ -268,112 +207,74 @@ namespace Oculus.Interaction
             _filter.mesh = _mesh;
         }
 
-        private void UpdateMeshData(TubePoint[] points)
+        private void UpdateMeshData(TubePoint[] points, int divisions, float width, Color tint)
         {
             int steps = points.Length;
-            float totalLength = 0f;
-
-            BevelCap(points[0], false, 0);
-
+            Quaternion rotation = Quaternion.identity;
+            float endFade = points[steps - 1].relativeLength - EndFadeThresold;
             for (int i = 0; i < steps; i++)
             {
                 Vector3 point = points[i].position;
-                Quaternion rotation = points[i].rotation;
                 float progress = points[i].relativeLength;
-                Color color = Gradient.Evaluate(progress) * _tint;
-
-                if (i > 0)
-                {
-                    totalLength += Vector3.Distance(point, points[i - 1].position);
-                }
-
+                Color color = Gradient.Evaluate(progress) * tint;
                 if (i / (steps - 1f) < Progress)
                 {
                     color.a *= ProgressFade;
                 }
-
+                else if (progress > endFade)
+                {
+                    float dif = 1f - ((progress - endFade) / EndFadeThresold);
+                    color.a *= dif;
+                }
                 _layout.color = color;
 
-                WriteCircle(point, rotation, _radius, i + _bevel, progress);
-            }
+                if (i < steps - 1)
+                {
+                    rotation = Quaternion.LookRotation(points[i].direction);
+                }
 
-            BevelCap(points[points.Length - 1], true, _bevel + steps);
+                for (int j = 0; j <= divisions; j++)
+                {
+                    float radius = 2 * Mathf.PI * j / divisions;
+                    Vector3 circle = new Vector3(Mathf.Sin(radius), Mathf.Cos(radius), 0);
+                    Vector3 normal = rotation * circle;
+
+                    _layout.pos = point + normal * width;
+                    if (_mirrorTexture)
+                    {
+                        float x = (j / (float)divisions) * 2f;
+                        if (j >= divisions * 0.5f)
+                        {
+                            x = 2 - x;
+                        }
+                        _layout.uv = new Vector2(x, progress);
+                    }
+                    else
+                    {
+                        _layout.uv = new Vector2(j / (float)divisions, progress);
+                    }
+                    int vertIndex = i * (divisions + 1) + j;
+                    _vertsData[vertIndex] = _layout;
+                }
+            }
 
             _mesh.bounds = new Bounds(
                 (points[0].position + points[steps - 1].position) * 0.5f,
                 points[steps - 1].position - points[0].position);
             _mesh.SetVertexBufferData(_vertsData, 0, 0, _vertsData.Length, 0, MeshUpdateFlags.DontRecalculateBounds);
-
-            float originFadeIn = StartFadeThresold / totalLength;
-            float originFadeOut = (StartFadeThresold + Feather) / totalLength;
-            float endFadeIn = (totalLength - EndFadeThresold) / totalLength;
-            float endFadeOut = (totalLength - EndFadeThresold - Feather) / totalLength;
-
-            _renderer.material.SetVector(_fadeLimitsShaderID, new Vector4(
-                _invertThreshold ? originFadeOut : originFadeIn,
-                _invertThreshold ? originFadeIn : originFadeOut,
-                endFadeOut,
-                endFadeIn));
-            _renderer.material.SetFloat(_fadeSignShaderID, _invertThreshold ? -1 : 1);
         }
 
-        private void BevelCap(TubePoint tubePoint, bool end, int indexOffset)
+        private int SetVertexCount(int positionCount, int divisions)
         {
-            Vector3 origin = tubePoint.position;
-            Quaternion rotation = tubePoint.rotation;
-            for (int i = 0; i < _bevel; i++)
-            {
-                float radiusFactor = Mathf.InverseLerp(-1, _bevel + 1, i);
-                if (end)
-                {
-                    radiusFactor = 1 - radiusFactor;
-                }
-                float positionFactor = Mathf.Sqrt(1 - radiusFactor * radiusFactor);
-                Vector3 point = origin + (end ? 1 : -1) * (rotation * Vector3.forward) * _radius * positionFactor;
-                WriteCircle(point, rotation, _radius * radiusFactor, i + indexOffset, end ? 1 : 0);
-            }
-        }
-
-        private void WriteCircle(Vector3 point, Quaternion rotation, float width, int index, float progress)
-        {
-            for (int j = 0; j <= _divisions; j++)
-            {
-                float radius = 2 * Mathf.PI * j / _divisions;
-                Vector3 circle = new Vector3(Mathf.Sin(radius), Mathf.Cos(radius), 0);
-                Vector3 normal = rotation * circle;
-
-                _layout.pos = point + normal * width;
-                if (_mirrorTexture)
-                {
-                    float x = (j / (float)_divisions) * 2f;
-                    if (j >= _divisions * 0.5f)
-                    {
-                        x = 2 - x;
-                    }
-                    _layout.uv = new Vector2(x, progress);
-                }
-                else
-                {
-                    _layout.uv = new Vector2(j / (float)_divisions, progress);
-                }
-                int vertIndex = index * (_divisions + 1) + j;
-                _vertsData[vertIndex] = _layout;
-            }
-        }
-
-        private int SetVertexCount(int positionCount, int divisions, int bevelCap)
-        {
-            bevelCap = bevelCap * 2;
             int vertsPerPosition = divisions + 1;
-            int vertCount = (positionCount + bevelCap) * vertsPerPosition;
+            int vertCount = positionCount * vertsPerPosition;
 
-            int tubeTriangles = (positionCount - 1 + bevelCap) * divisions * 6;
+            int tubeTriangles = (positionCount - 1) * divisions * 6;
             int capTriangles = (divisions - 2) * 3;
-            int triangleCount = tubeTriangles + capTriangles * 2;
-            _tris = new int[triangleCount];
+            _tris = new int[tubeTriangles + capTriangles * 2];
 
             // handle triangulation
-            for (int i = 0; i < positionCount - 1 + bevelCap; i++)
+            for (int i = 0; i < positionCount - 1; i++)
             {
                 // add faces
                 for (int j = 0; j < divisions; j++)
@@ -407,12 +308,11 @@ namespace Oculus.Interaction
 
         #region Inject
         public void InjectAllTubeRenderer(MeshFilter filter,
-            MeshRenderer renderer, int divisions, int bevel)
+            MeshRenderer renderer, int divisions)
         {
             InjectFilter(filter);
             InjectRenderer(renderer);
             InjectDivisions(divisions);
-            InjectBevel(bevel);
         }
         public void InjectFilter(MeshFilter filter)
         {
@@ -425,10 +325,6 @@ namespace Oculus.Interaction
         public void InjectDivisions(int divisions)
         {
             _divisions = divisions;
-        }
-        public void InjectBevel(int bevel)
-        {
-            _bevel = bevel;
         }
 
         #endregion

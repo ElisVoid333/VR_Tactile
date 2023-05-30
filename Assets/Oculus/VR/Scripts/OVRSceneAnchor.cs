@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -53,7 +54,7 @@ public sealed class OVRSceneAnchor : MonoBehaviour
     private static readonly Quaternion RotateY180 = Quaternion.Euler(0, 180, 0);
     private OVRPlugin.Posef? _pose = null;
 
-    internal bool IsComponentEnabled(OVRPlugin.SpaceComponentType spaceComponentType) =>
+    private bool IsComponentEnabled(OVRPlugin.SpaceComponentType spaceComponentType) =>
         OVRPlugin.GetSpaceComponentStatus(Space, spaceComponentType, out var componentEnabled, out _)
         && componentEnabled;
 
@@ -99,6 +100,12 @@ public sealed class OVRSceneAnchor : MonoBehaviour
         AnchorReferenceCountDictionary.TryGetValue(Space, out var referenceCount);
         AnchorReferenceCountDictionary[Space] = referenceCount + 1;
 
+        if (!IsComponentEnabled(OVRPlugin.SpaceComponentType.Locatable))
+        {
+            OVRSceneManager.Development.LogError(nameof(OVRSceneAnchor),
+                $"[{uuid}] Is missing the {nameof(OVRPlugin.SpaceComponentType.Locatable)} component.");
+        }
+
         // Generally, we want to set the transform as soon as possible, but there is a valid use case where we want to
         // disable this component as soon as its added to override the transform.
         if (enabled)
@@ -116,6 +123,7 @@ public sealed class OVRSceneAnchor : MonoBehaviour
                 OVRSceneManager.Development.LogWarning(nameof(OVRSceneAnchor),
                     $"[{uuid}] {nameof(OVRPlugin.TryLocateSpace)} failed. The entity may have the wrong initial transform.");
             }
+
         }
 
         SyncComponent<OVRSemanticClassification>(OVRPlugin.SpaceComponentType.SemanticLabels);
@@ -161,7 +169,6 @@ public sealed class OVRSceneAnchor : MonoBehaviour
             {
                 return false;
             }
-
             _pose = pose;
         }
 
@@ -239,3 +246,4 @@ internal interface IOVRSceneComponent
 {
     void Initialize();
 }
+

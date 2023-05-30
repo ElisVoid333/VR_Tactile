@@ -21,6 +21,7 @@
 using Oculus.Interaction.Input;
 using Oculus.Interaction.Locomotion;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Oculus.Interaction.DistanceReticles
 {
@@ -35,12 +36,15 @@ namespace Oculus.Interaction.DistanceReticles
         private Renderer _invalidTargetRenderer;
 
         [SerializeField, Optional, Interface(typeof(IAxis1D))]
-        private UnityEngine.Object _progress;
+        private MonoBehaviour _progress;
         private IAxis1D Progress;
 
         [SerializeField, Optional, Interface(typeof(IActiveState))]
-        private UnityEngine.Object _highlightState;
+        private MonoBehaviour _highlightState;
         private IActiveState HighlightState;
+
+        public UnityEvent WhenPerformLocomotion;
+        public UnityEvent WhenDenyLocomotion;
 
         protected override IInteractorView Interactor { get; set; }
 
@@ -67,6 +71,37 @@ namespace Oculus.Interaction.DistanceReticles
             this.EndStart(ref _started);
         }
 
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            if (_started)
+            {
+                _interactor.WhenLocomotionPerformed += HandleLocomotionPerformed;
+                _interactor.WhenLocomotionDenied += HandleLocomotionDenied;
+            }
+        }
+
+        protected override void OnDisable()
+        {
+            if (_started)
+            {
+                _interactor.WhenLocomotionPerformed -= HandleLocomotionPerformed;
+                _interactor.WhenLocomotionDenied -= HandleLocomotionDenied;
+            }
+            base.OnDisable();
+        }
+
+        private void HandleLocomotionPerformed(LocomotionEvent obj)
+        {
+            WhenPerformLocomotion.Invoke();
+        }
+
+        private void HandleLocomotionDenied()
+        {
+            WhenDenyLocomotion.Invoke();
+        }
+
         protected override void Align(ReticleDataTeleport data)
         {
             bool highlight = HighlightState != null && HighlightState.Active;
@@ -90,6 +125,7 @@ namespace Oculus.Interaction.DistanceReticles
             {
                 reticle = _invalidTargetRenderer;
             }
+
 
             if (reticle == null)
             {
@@ -164,7 +200,7 @@ namespace Oculus.Interaction.DistanceReticles
 
         public void InjectOptionalProgress(IAxis1D progress)
         {
-            _progress = progress as UnityEngine.Object;
+            _progress = progress as MonoBehaviour;
             Progress = progress;
         }
         #endregion

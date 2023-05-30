@@ -8,12 +8,11 @@
 
 using Meta.WitAi.Configuration;
 using Meta.WitAi.Data.Configuration;
-using Meta.WitAi.Requests;
 
 namespace Meta.WitAi.Interfaces
 {
     public interface IWitRequestProvider
     {
-        WitRequest CreateWitRequest(WitConfiguration config, WitRequestOptions requestOptions, VoiceServiceRequestEvents requestEvents, IDynamicEntitiesProvider[] additionalEntityProviders = null);
+        WitRequest CreateWitRequest(WitConfiguration config, WitRequestOptions requestOptions, IDynamicEntitiesProvider[] additionalEntityProviders = null);
     }
 }

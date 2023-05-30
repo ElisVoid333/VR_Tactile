@@ -28,7 +28,7 @@ namespace Oculus.Interaction
     public class RayInteractor : PointerInteractor<RayInteractor, RayInteractable>
     {
         [SerializeField, Interface(typeof(ISelector))]
-        private UnityEngine.Object _selector;
+        private MonoBehaviour _selector;
 
         [SerializeField]
         private Transform _rayOrigin;
@@ -116,7 +116,7 @@ namespace Oculus.Interaction
                 {
                     bool equal = Mathf.Abs(hit.Distance - closestDist) < _equalDistanceThreshold;
                     if ((!equal && hit.Distance < closestDist) ||
-                        (equal && ComputeCandidateTiebreaker(interactable, closestInteractable) > 0))
+                        (equal && interactable.TiebreakerScore > closestInteractable.TiebreakerScore))
                     {
                         closestDist = hit.Distance;
                         closestInteractable = interactable;
@@ -132,17 +132,6 @@ namespace Oculus.Interaction
             _rayCandidateProperties = new RayCandidateProperties(closestInteractable, candidatePosition);
 
             return closestInteractable;
-        }
-
-        protected override int ComputeCandidateTiebreaker(RayInteractable a, RayInteractable b)
-        {
-            int result = base.ComputeCandidateTiebreaker(a, b);
-            if (result != 0)
-            {
-                return result;
-            }
-
-            return a.TiebreakerScore.CompareTo(b.TiebreakerScore);
         }
 
         protected override void InteractableSelected(RayInteractable interactable)
@@ -225,7 +214,7 @@ namespace Oculus.Interaction
 
         public void InjectSelector(ISelector selector)
         {
-            _selector = selector as UnityEngine.Object;
+            _selector = selector as MonoBehaviour;
             Selector = selector;
         }
 

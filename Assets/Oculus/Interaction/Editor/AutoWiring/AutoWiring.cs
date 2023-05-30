@@ -57,11 +57,6 @@ namespace Oculus.Interaction.Editor
             _configs.Add(type, fieldConfigs);
         }
 
-        public static void Unregister(Type type)
-        {
-            _configs.Remove(type);
-        }
-
         public static bool AutoWireField(MonoBehaviour monoBehaviour,
             string fieldName,
             FieldWiringStrategy[] wiringMethods)
@@ -103,13 +98,9 @@ namespace Oculus.Interaction.Editor
                 }
             }
 
-            if (field.GetCustomAttribute<OptionalAttribute>() == null)
-            {
-                Debug.LogWarning("Auto-wiring failed: no suitable targets for " +
-                                 monoBehaviour.gameObject.name + "::" + monoBehaviour.GetType().Name +
-                                 "." + field.Name + " could be found.");
-            }
-
+            Debug.LogWarning("Auto-wiring failed: no suitable targets for " +
+                             monoBehaviour.gameObject.name + "::" + monoBehaviour.GetType().Name +
+                             "." + field.Name + " could be found.");
             return false;
         }
 

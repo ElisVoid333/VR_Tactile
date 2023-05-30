@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
  *
@@ -38,7 +38,7 @@ namespace Oculus.Interaction.Input
     public abstract class DataSource<TData> : MonoBehaviour, IDataSource<TData>
         where TData : class, ICopyFrom<TData>, new()
     {
-        public bool Started => _started;
+        public bool Started { get; private set; }
         protected bool _started = false;
         private bool _requiresUpdate = true;
 
@@ -59,7 +59,7 @@ namespace Oculus.Interaction.Input
 
         [SerializeField, Interface(typeof(IDataSource))]
         [Optional(OptionalAttribute.Flag.DontHide)]
-        private UnityEngine.Object _updateAfter;
+        private MonoBehaviour _updateAfter;
 
         private IDataSource UpdateAfter;
         private int _currentDataVersion;
@@ -82,6 +82,7 @@ namespace Oculus.Interaction.Input
                 UpdateAfter = _updateAfter as IDataSource;
                 this.AssertField(UpdateAfter, nameof(UpdateAfter));
             }
+            Started = true;
             this.EndStart(ref _started);
         }
 
@@ -89,7 +90,7 @@ namespace Oculus.Interaction.Input
         {
             if (_started)
             {
-                if (UpdateModeAfterPrevious && UpdateAfter != null)
+                if (Started && UpdateModeAfterPrevious && UpdateAfter != null)
                 {
                     UpdateAfter.InputDataAvailable += MarkInputDataRequiresUpdate;
                 }
@@ -196,7 +197,7 @@ namespace Oculus.Interaction.Input
 
         public void InjectUpdateAfter(IDataSource updateAfter)
         {
-            _updateAfter = updateAfter as UnityEngine.Object;
+            _updateAfter = updateAfter as MonoBehaviour;
             UpdateAfter = updateAfter;
         }
         #endregion

@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Meta.Conduit;
 using Meta.WitAi.Json;
 using UnityEditor;
@@ -19,8 +20,6 @@ using UnityEngine;
 using Meta.WitAi.Lib;
 using Meta.WitAi.Requests;
 using Meta.WitAi.Windows;
-using Meta.WitAi.Interfaces;
-using UnityEngine.SceneManagement;
 
 namespace Meta.WitAi.Data.Configuration
 {
@@ -74,14 +73,13 @@ namespace Meta.WitAi.Data.Configuration
             _needsConfigReload = false;
 
             // Find all Wit Configurations
-            List<WitConfiguration> loaded = GetLoadedConfigurations();
             List<WitConfiguration> found = new List<WitConfiguration>();
             string[] guids = AssetDatabase.FindAssets("t:WitConfiguration");
             foreach (var guid in guids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 WitConfiguration config = AssetDatabase.LoadAssetAtPath<WitConfiguration>(path);
-                if (!config.isDemoOnly || loaded.Contains(config))
+                if (!config.isDemoOnly)
                 {
                     found.Add(config);
                 }
@@ -108,36 +106,6 @@ namespace Meta.WitAi.Data.Configuration
             // Search through configs
             return Array.FindIndex(WitConfigs, (checkConfig) => string.Equals(checkConfig.name, configurationName));
         }
-        // Return all configurations referenced in loaded scenes
-        public static List<WitConfiguration> GetLoadedConfigurations()
-        {
-            // Get results
-            List<WitConfiguration> results = new List<WitConfiguration>();
-
-            // Iterate loaded scenes
-            for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
-            {
-                Scene scene = SceneManager.GetSceneAt(sceneIndex);
-                foreach (var rootGameObject in scene.GetRootGameObjects())
-                {
-                    IWitConfigurationProvider[] providers = rootGameObject.GetComponentsInChildren<IWitConfigurationProvider>(true);
-                    if (providers != null)
-                    {
-                        foreach (var provider in providers)
-                        {
-                            WitConfiguration config = provider.Configuration;
-                            if (config != null && !results.Contains(config))
-                            {
-                                results.Add(config);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Return results list
-            return results;
-        }
         #endregion
 
         #region MANAGEMENT
@@ -152,7 +120,7 @@ namespace Meta.WitAi.Data.Configuration
             int index = SaveConfiguration(serverToken, configurationAsset);
             if (index == -1)
             {
-                configurationAsset.DestroySafely();
+                MonoBehaviour.DestroyImmediate(configurationAsset);
             }
             // Return new index
             return index;
@@ -312,11 +280,10 @@ namespace Meta.WitAi.Data.Configuration
         internal static void ImportData(this WitConfiguration configuration, Manifest manifest, VRequest.RequestCompleteDelegate<bool> onComplete = null, bool suppressErrors = false)
         {
             var manifestData = GetSanitizedManifestString(manifest);
-            var request = new WitSyncVRequest(configuration);
+            var request = configuration.CreateImportDataRequest(GetAppName(configuration), manifestData);
             VLog.SuppressErrors = suppressErrors;
-            request.RequestImportData(manifestData, (error, responseData) =>
+            PerformRequest(request, (error) =>
             {
-                VLog.SuppressErrors = false;
                 if (!string.IsNullOrEmpty(error))
                 {
                     onComplete?.Invoke(false, error);
@@ -365,6 +332,41 @@ namespace Meta.WitAi.Data.Configuration
                 // Complete
                 onRefreshComplete?.Invoke(s);
             });
+        }
+
+        // Get application name
+        private static string GetAppName(WitConfiguration configuration)
+        {
+            if (configuration != null)
+            {
+                return configuration.GetApplicationInfo().name;
+            }
+            return string.Empty;
+        }
+
+        private static void PerformRequest(WitRequest request, Action<string> onComplete)
+        {
+            // Add response delegate
+            request.onResponse += (response) =>
+            {
+                // Get status
+                int status = response.StatusCode;
+                // HTTP failed
+                if (status != 200)
+                {
+                    onComplete($"Request Failed [{status}]: {response.StatusDescription}\nPath: {request}");
+                }
+                // Success
+                else
+                {
+                    VLog.D($"Request Success\nType: {request}");
+                    onComplete?.Invoke("");
+                }
+            };
+
+            // Perform
+            VLog.D($"Request Begin\nType: {request}");
+            request.Request();
         }
         #endregion
     }

@@ -24,127 +24,126 @@ using UnityEditor;
 
 internal class OVRConfigurationTaskProcessorQueue
 {
-    public event Action<OVRConfigurationTaskProcessor> OnProcessorCompleted;
+	public event Action<OVRConfigurationTaskProcessor> OnProcessorCompleted;
 
-    private readonly Queue<OVRConfigurationTaskProcessor> _queue = new Queue<OVRConfigurationTaskProcessor>();
+	private readonly Queue<OVRConfigurationTaskProcessor> _queue = new Queue<OVRConfigurationTaskProcessor>();
 
-    public bool Busy => _queue.Count > 0;
-    public bool Blocked => Busy && _queue.Peek().Blocking;
+	public bool Busy => _queue.Count > 0;
+	public bool Blocked => Busy && _queue.Peek().Blocking;
+	public bool BlockedBy(OVRConfigurationTaskProcessor.ProcessorType processorType)
+	{
+		foreach (var processor in _queue)
+		{
+			if (processor.Type == processorType && processor.Blocking)
+			{
+				return true;
+			}
+		}
 
-    public bool BlockedBy(OVRConfigurationTaskProcessor.ProcessorType processorType)
-    {
-        foreach (var processor in _queue)
-        {
-            if (processor.Type == processorType && processor.Blocking)
-            {
-                return true;
-            }
-        }
+		return false;
+	}
+	public bool BusyWith(OVRConfigurationTaskProcessor.ProcessorType processorType)
+	{
+		foreach (var processor in _queue)
+		{
+			if (processor.Type == processorType)
+			{
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    public bool BusyWith(OVRConfigurationTaskProcessor.ProcessorType processorType)
-    {
-        foreach (var processor in _queue)
-        {
-            if (processor.Type == processorType)
-            {
-                return true;
-            }
-        }
+	public void Request(OVRConfigurationTaskProcessor processor)
+	{
+		if (!OVRProjectSetup.Enabled.Value)
+		{
+			return;
+		}
 
-        return false;
-    }
+		Enqueue(processor);
+	}
 
-    public void Request(OVRConfigurationTaskProcessor processor)
-    {
-        if (!OVRProjectSetup.Enabled.Value)
-        {
-            return;
-        }
+	private void Enqueue(OVRConfigurationTaskProcessor processor)
+	{
+		if (!Busy)
+		{
+			// If was empty, then register to editor update
+			EditorApplication.update += Update;
+		}
 
-        Enqueue(processor);
-    }
+		// Enqueue
+		_queue.Enqueue(processor);
 
-    private void Enqueue(OVRConfigurationTaskProcessor processor)
-    {
-        if (!Busy)
-        {
-            // If was empty, then register to editor update
-            EditorApplication.update += Update;
-        }
+		processor.OnRequested();
 
-        // Enqueue
-        _queue.Enqueue(processor);
+		if (processor.Blocking)
+		{
+			// In the case where the newly added processor is blocking
+			// we'll make all the previously queued processor blocking as well
+			foreach (var otherProcessor in _queue)
+			{
+				otherProcessor.Blocking = true;
+			}
 
-        processor.OnRequested();
+			// Force an update, this will be The blocking update
+			Update();
+		}
+	}
 
-        if (processor.Blocking)
-        {
-            // In the case where the newly added processor is blocking
-            // we'll make all the previously queued processor blocking as well
-            foreach (var otherProcessor in _queue)
-            {
-                otherProcessor.Blocking = true;
-            }
+	private void Dequeue(OVRConfigurationTaskProcessor processor)
+	{
+		// We should only dequeue the current processor
+		if (processor != _queue.Peek())
+		{
+			return;
+		}
 
-            // Force an update, this will be The blocking update
-            Update();
-        }
-    }
+		// Trigger specific callbacks
+		processor.Complete();
 
-    private void Dequeue(OVRConfigurationTaskProcessor processor)
-    {
-        // We should only dequeue the current processor
-        if (processor != _queue.Peek())
-        {
-            return;
-        }
+		// Trigger global callbacks
+		OnProcessorCompleted?.Invoke(processor);
 
-        // Trigger specific callbacks
-        processor.Complete();
+		// Dequeue
+		_queue.Dequeue();
 
-        // Trigger global callbacks
-        OnProcessorCompleted?.Invoke(processor);
+		if (!Busy)
+		{
+			// Now that it is empty, unregister to editor update
+			EditorApplication.update -= Update;
+		}
+	}
 
-        // Dequeue
-        _queue.Dequeue();
+	private void Update()
+	{
+		do
+		{
+			// Grab the current processor
+			var current = _queue.Peek();
+			if (!current.Started)
+			{
+				// If not busy, this implies it hasn't been started yet
+				// Start it
+				current.Start();
+			}
 
-        if (!Busy)
-        {
-            // Now that it is empty, unregister to editor update
-            EditorApplication.update -= Update;
-        }
-    }
+			current.Update();
 
-    private void Update()
-    {
-        do
-        {
-            // Grab the current processor
-            var current = _queue.Peek();
-            if (!current.Started)
-            {
-                // If not busy, this implies it hasn't been started yet
-                // Start it
-                current.Start();
-            }
+			if (current.Completed)
+			{
+				// If it is completed, we can remove it from the queue
+				Dequeue(current);
+			}
+			else
+			{
+				// If it is not completed, another update call will be necessary
+				return;
+			}
 
-            current.Update();
-
-            if (current.Completed)
-            {
-                // If it is completed, we can remove it from the queue
-                Dequeue(current);
-            }
-            else
-            {
-                // If it is not completed, another update call will be necessary
-                return;
-            }
-        } while (_queue.Count > 0 && (_queue.Peek()?.Blocking ?? false));
-        // If the queue is blocking, do it until the queue is not empty
-        // and the current processor is blocking
-    }
+		} while (_queue.Count > 0 && (_queue.Peek()?.Blocking ?? false));
+		// If the queue is blocking, do it until the queue is not empty
+		// and the current processor is blocking
+	}
 }

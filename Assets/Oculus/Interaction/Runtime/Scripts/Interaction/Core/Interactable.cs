@@ -37,7 +37,7 @@ namespace Oculus.Interaction
                                         where TInteractable : Interactable<TInteractor, TInteractable>
     {
         [SerializeField, Interface(typeof(IGameObjectFilter)), Optional]
-        private List<UnityEngine.Object> _interactorFilters = new List<UnityEngine.Object>();
+        private List<MonoBehaviour> _interactorFilters = new List<MonoBehaviour>();
         private List<IGameObjectFilter> InteractorFilters = null;
 
         /// <summary>
@@ -54,8 +54,6 @@ namespace Oculus.Interaction
         [SerializeField, Optional]
         private UnityEngine.Object _data = null;
         public object Data { get; protected set; } = null;
-
-        protected bool _started = false;
 
         #region Properties
         public int MaxInteractors
@@ -259,13 +257,8 @@ namespace Oculus.Interaction
             {
                 return;
             }
-
-            if (_started)
-            {
-                _registry.Register((TInteractable)this);
-                State = InteractableState.Normal;
-            }
-
+            _registry.Register((TInteractable)this);
+            State = InteractableState.Normal;
         }
 
         public void Disable()
@@ -275,23 +268,20 @@ namespace Oculus.Interaction
                 return;
             }
 
-            if (_started)
+            List<TInteractor> selectingInteractorsCopy = new List<TInteractor>(_selectingInteractors);
+            foreach (TInteractor selectingInteractor in selectingInteractorsCopy)
             {
-                List<TInteractor> selectingInteractorsCopy = new List<TInteractor>(_selectingInteractors);
-                foreach (TInteractor selectingInteractor in selectingInteractorsCopy)
-                {
-                    RemoveSelectingInteractor(selectingInteractor);
-                }
-
-                List<TInteractor> interactorsCopy = new List<TInteractor>(_interactors);
-                foreach (TInteractor interactor in interactorsCopy)
-                {
-                    RemoveInteractor(interactor);
-                }
-
-                _registry.Unregister((TInteractable)this);
-                State = InteractableState.Disabled;
+                RemoveSelectingInteractor(selectingInteractor);
             }
+
+            List<TInteractor> interactorsCopy = new List<TInteractor>(_interactors);
+            foreach (TInteractor interactor in interactorsCopy)
+            {
+                RemoveInteractor(interactor);
+            }
+
+            State = InteractableState.Disabled;
+            _registry.Unregister((TInteractable)this);
         }
 
         public void RemoveInteractorByIdentifier(int id)
@@ -337,7 +327,6 @@ namespace Oculus.Interaction
 
         protected virtual void Start()
         {
-            this.BeginStart(ref _started);
             this.AssertCollectionItems(InteractorFilters, nameof(InteractorFilters));
 
             if (Data == null)
@@ -345,7 +334,6 @@ namespace Oculus.Interaction
                 _data = this;
                 Data = _data;
             }
-            this.EndStart(ref _started);
         }
 
         protected virtual void OnEnable()
@@ -377,7 +365,7 @@ namespace Oculus.Interaction
         {
             InteractorFilters = interactorFilters;
             _interactorFilters = interactorFilters.ConvertAll(interactorFilter =>
-                                    interactorFilter as UnityEngine.Object);
+                                    interactorFilter as MonoBehaviour);
         }
 
         public void InjectOptionalData(object data)

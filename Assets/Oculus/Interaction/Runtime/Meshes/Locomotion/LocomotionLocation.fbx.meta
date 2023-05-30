@@ -23,7 +23,7 @@ ModelImporter:
     second: DotOnStateClip
   externalObjects: {}
   materials:
-    materialImportMode: 0
+    materialImportMode: 2
     materialName: 1
     materialSearch: 2
     materialLocation: 0

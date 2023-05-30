@@ -30,8 +30,6 @@ namespace Oculus.Interaction.Locomotion
         [SerializeField]
         private AdjustableAudio _translationSound;
         [SerializeField]
-        private AdjustableAudio _translationDeniedSound;
-        [SerializeField]
         private AdjustableAudio _snapTurnSound;
 
         [SerializeField]
@@ -76,11 +74,6 @@ namespace Oculus.Interaction.Locomotion
             {
                 PlayRotationSound(delta.rotation.y * delta.rotation.w);
             }
-            if (locomotionEvent.Translation == LocomotionEvent.TranslationType.None
-                && locomotionEvent.Rotation == LocomotionEvent.RotationType.None)
-            {
-                PlayDenialSound(delta.position.magnitude);
-            }
         }
 
         private void PlayTranslationSound(float translationDistance)
@@ -90,12 +83,6 @@ namespace Oculus.Interaction.Locomotion
             _translationSound.PlayAudio(t, pitch);
         }
 
-        private void PlayDenialSound(float translationDistance)
-        {
-            float t = _translationCurve.Evaluate(translationDistance);
-            float pitch = t + Random.Range(-_pitchVariance, _pitchVariance);
-            _translationDeniedSound.PlayAudio(t, pitch);
-        }
 
         private void PlayRotationSound(float rotationLength)
         {

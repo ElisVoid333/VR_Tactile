@@ -37,8 +37,7 @@ internal class OVRSceneManagerEditor : Editor
         _volumePrefab = serializedObject.FindProperty(nameof(OVRSceneManager.VolumePrefab));
         _prefabOverrides = serializedObject.FindProperty(nameof(OVRSceneManager.PrefabOverrides));
         _verboseLogging = serializedObject.FindProperty(nameof(OVRSceneManager.VerboseLogging));
-        _maxSceneAnchorUpdatesPerFrame =
-            serializedObject.FindProperty(nameof(OVRSceneManager.MaxSceneAnchorUpdatesPerFrame));
+        _maxSceneAnchorUpdatesPerFrame = serializedObject.FindProperty(nameof(OVRSceneManager.MaxSceneAnchorUpdatesPerFrame));
     }
 
     public override void OnInspectorGUI()
@@ -54,7 +53,6 @@ internal class OVRSceneManagerEditor : Editor
             EditorGUILayout.PropertyField(_verboseLogging);
             EditorGUILayout.PropertyField(_maxSceneAnchorUpdatesPerFrame);
         }
-
         serializedObject.ApplyModifiedProperties();
     }
 }

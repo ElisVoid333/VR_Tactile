@@ -3,7 +3,6 @@ Shader "Unlit/Hotspot"
 	Properties
 	{
 		_MainTex("Texture", 2D) = "white" {}
-		_Color("Color", COLOR) = (1,1,1,1)
 		_Progress("Progress",Range(0,1)) = 0
 		_Highlight("Highlight Strength",Range(0,1)) = 0
 		_HighlightColor("Highlight Color", COLOR) = (1,1,1,1)
@@ -44,7 +43,6 @@ Shader "Unlit/Hotspot"
 				};
 
 				sampler2D _MainTex;
-				half4 _Color;
 				half _Progress;
 				half _Highlight;
 				half4 _HighlightColor;
@@ -74,7 +72,7 @@ Shader "Unlit/Hotspot"
 
 				half4 frag(VertexOutput i) : SV_Target
 				{
-					half4 col = tex2D(_MainTex, i.uv) * _Color;
+					half4 col = tex2D(_MainTex, i.uv);
 					col.rgb = lerp(col.rgb, _HighlightColor.rgb, _Highlight * _HighlightColor.a);
 					return col;
 				}

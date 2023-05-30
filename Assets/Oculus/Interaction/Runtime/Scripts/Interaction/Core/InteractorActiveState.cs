@@ -36,7 +36,7 @@ namespace Oculus.Interaction
         }
 
         [SerializeField, Interface(typeof(IInteractor))]
-        private UnityEngine.Object _interactor;
+        private MonoBehaviour _interactor;
         private IInteractor Interactor;
 
         [SerializeField]
@@ -58,12 +58,7 @@ namespace Oculus.Interaction
         {
             get
             {
-                if (!isActiveAndEnabled)
-                {
-                    return false;
-                }
-
-                if ((_property & InteractorProperty.HasCandidate) != 0
+                if((_property & InteractorProperty.HasCandidate) != 0
                     && Interactor.HasCandidate)
                 {
                     return true;
@@ -116,7 +111,7 @@ namespace Oculus.Interaction
 
         public void InjectInteractor(IInteractor interactor)
         {
-            _interactor = interactor as UnityEngine.Object;
+            _interactor = interactor as MonoBehaviour;
             Interactor = interactor;
         }
         #endregion
