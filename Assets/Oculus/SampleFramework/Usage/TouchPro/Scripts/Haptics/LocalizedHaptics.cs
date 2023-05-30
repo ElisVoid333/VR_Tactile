@@ -72,20 +72,12 @@ public class LocalizedHaptics : MonoBehaviour
 
         if (isGrabbed == true)
         {
-            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.1f, 0.6f, m_controller);
+            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.01f, 10f, m_controller);
+            Debug.Log("bzzz now");
         }
         else if (isHit == true)
         {
-            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.1f, 0.2f, m_controller);
-        }
-
-        if (isGrabbed == false)
-        {
-            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.0f, 0.0f, m_controller);
-        }
-        else if (isHit == false)
-        {
-            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.0f, 0.0f, m_controller);
+            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.001f, 0.2f, m_controller);
         }
     }
 }
