@@ -9,10 +9,19 @@ public class LocalizedHaptics : MonoBehaviour
 
     private OVRInput.Controller m_controller; //This is the default code that was originally in the file
     //public Collider mugCollider;
+    //public Collider L_handCollider;
+    //public Collider R_handCollider;
     //public Collider deskCollider;
     public bool isGrabbed;
     public bool isHit;
 
+    /*private void OnTriggerEnter(Collider deskCollider)
+    {
+        if (isHit == false)
+        {
+            isHit = true;
+        }
+    }*/
 
     public void Grab() //Object has been grabbed
     {
@@ -77,7 +86,7 @@ public class LocalizedHaptics : MonoBehaviour
         }
         else if (isHit == true)
         {
-            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.001f, 0.2f, m_controller);
+            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.001f, 10f, m_controller);
         }
     }
 }
