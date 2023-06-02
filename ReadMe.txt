@@ -1,3 +1,26 @@
+# VR Tactile Test #
+To run the scene, open the project in the correct Unity version and open the scene Assets/VRexperiment/VRSeriousTest-v11. 
+The left controller should be attached to a mug. There should be a set of image in the project that show the controllers
+intended orientation in the mug.
+
+Hacked together with the following assets for Prof. Teather's VR class Winter 2023
+Rodolfo Cossovich
+Andrew Thompson
+Shagha Kalantari
+
+And later update by Jay Henderson and Elis Joynes.
+
+## Tech requirements:
+    - Unity 2021.3.21f1 with an Oculus Quest 2 (Dev mode) to run tethered
+    - Oculus XR Plugin 3.2.3
+    - OpenXR Plugin 1.6.0
+    - XR Hands 1.1.0
+    - XR Interaction Toolkit 2.3.0 with Starter Assets and Hands Interaction Demo samples installed 
+    - XR Hands 1.1.0 with HandVisualizer sample installed
+    - TextMeshPro 3.06
+    - Ardity 1.1.0 (unused in the latest version)
+
+## Description ##
 This project is used to test how people respond to different interaction methods.
 There is a desk with a mug and on the left side and the user is meant to try picking it up and placing it on the plane to 
 their right on the desk.
@@ -17,7 +40,7 @@ The Third Condition is using the controllers that provide haptic feedback to int
 will provide some vibrotactile feedback when the user comes in contact with the mug and when they pick it up. The user will 
 use the controllers to pick up and move the virtual mug onto the target.
 
-
+#To Change Conditions#
 To toggle between left controller mug and left controller hand.
 Go to the heirarchy:
 
