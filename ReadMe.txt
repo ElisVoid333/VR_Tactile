@@ -1,6 +1,6 @@
 This project is used to test how people respond to different interaction methods.
-There is a desk with a mug and on the left side and the user is meant to try picking it up and placing it on the plane to their 
-right on the desk.
+There is a desk with a mug and on the left side and the user is meant to try picking it up and placing it on the plane to 
+their right on the desk.
 
 The first Condition is a bare hand interaction using hand tracking. The User uses their bare hands to interact with 
 the mug on the desk and pick it up to place it on the target. The Hand tracking should be enabled by placing the controllers 
