@@ -14,8 +14,8 @@ so they appear the same as your virtual hands. The user will use the controllers
 target.
 
 The Third Condition is using the controllers that provide haptic feedback to interact with the virtual mug. The controllers 
-will provide some vibrotactile feedback when the user comes in contact with the mug and when they pick it up. The user will use
-the controllers to pick up and move the virtual mug onto the target.
+will provide some vibrotactile feedback when the user comes in contact with the mug and when they pick it up. The user will 
+use the controllers to pick up and move the virtual mug onto the target.
 
 
 To toggle between left controller mug and left controller hand.
