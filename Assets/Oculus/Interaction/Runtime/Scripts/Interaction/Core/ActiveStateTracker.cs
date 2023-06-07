@@ -73,6 +73,7 @@ namespace Oculus.Interaction
                     _gameObjects.Add(transform.GetChild(i).gameObject);
                 }
             }
+            Debug.Log("Grab Active!"); /////Elis Added
 
             SetDependentsActive(false);
         }

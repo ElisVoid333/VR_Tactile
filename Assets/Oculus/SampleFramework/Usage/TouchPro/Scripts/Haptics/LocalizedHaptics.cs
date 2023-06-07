@@ -1,6 +1,7 @@
 // (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
 
 using UnityEngine;
+using UnityEngine.XR.OpenXR.Input;
 
 public class LocalizedHaptics : MonoBehaviour
 {
@@ -77,16 +78,22 @@ public class LocalizedHaptics : MonoBehaviour
         float handAmp = OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger, m_controller) > 0.5f ? 1f : 0f;
         OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0f, handAmp, m_controller);   */
 
-        float handAmp = OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger, m_controller) > 0.5f ? 1f : 0f;
+        float handAmp = OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger, m_controller); //> 0.5f ? 1f : 0f;
+        float handFreq = 0.02f;
 
         if (isGrabbed == true)
         {
-            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.01f, 10f, m_controller);
+            //OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.05f, handAmp, m_controller);
+            //OVRInput.SetControllerVibration(0.05f, handAmp, m_controller);
+            handFreq = 0.05f;
             Debug.Log("bzzz now");
         }
         else if (isHit == true)
         {
-            OVRInput.SetControllerLocalizedVibration(OVRInput.HapticsLocation.Hand, 0.001f, 10f, m_controller);
+            handFreq = 0.08f;
+            Debug.Log("bzzz now");
         }
+
+        OVRInput.SetControllerVibration(handFreq, handAmp, m_controller);
     }
 }
