@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
 /// <summary>
@@ -194,6 +195,11 @@ public class OVRGrabber : MonoBehaviour
         int refCount = 0;
         m_grabCandidates.TryGetValue(grabbable, out refCount);
         m_grabCandidates[grabbable] = refCount + 1;
+
+        float handAmp = OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger, m_controller); //> 0.5f ? 1f : 0f;
+        float handFreq = 0.02f;
+
+        OVRInput.SetControllerVibration(handFreq, handAmp, m_controller);
     }
 
     void OnTriggerExit(Collider otherCollider)
