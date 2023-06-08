@@ -20,6 +20,11 @@ And later update by Jay Henderson and Elis Joynes.
     - TextMeshPro 3.06
     - Ardity 1.1.0 (unused in the latest version)
 
+The project works best when plugged in and run in rift mode with a quest. The haptic feedback works best this way.
+
+If you build it locally on a quest and run it that way everything still works but the haptic feedback gets reset to the
+default values which is much stronger and has an extented duration.
+
 ## Description ##
 This project is used to test how people respond to different interaction methods.
 There is a desk with a mug and on the left side and the user is meant to try picking it up and placing it on the plane to 
