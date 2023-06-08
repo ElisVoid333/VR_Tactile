@@ -25,7 +25,7 @@ This project is used to test how people respond to different interaction methods
 There is a desk with a mug and on the left side and the user is meant to try picking it up and placing it on the plane to 
 their right on the desk.
 
-The first Condition is a bare hand interaction using hand tracking. The User uses their bare hands to interact with 
+The First cCondition is a bare hand interaction using hand tracking. The User uses their bare hands to interact with 
 the mug on the desk and pick it up to place it on the target. The Hand tracking should be enabled by placing the controllers 
 on the desk and moving your hands in front of the headset until it triggers and your virtual hands appear.
 
@@ -51,12 +51,12 @@ OVRCamerRig
 				OVRLeftHandVisual
 					OculusHand_L
 
-To make hand active turn on b_l_wrist and l_handMeshNode, turn off BlueMug.
+To make Hand active turn on b_l_wrist and l_handMeshNode, turn off BlueMug.
 
 To make Mug active turn on BlueMug, turn off b_l_wrist and l_handMeshNode.
 
 
-To togle the grab function on the left controller if you don't want the user to be able to grab things with the Blue mug active.
+To toggle the grab function on the left controller if you don't want the user to be able to grab things with the Blue mug active.
 
 Go to the hierarchy:
 
