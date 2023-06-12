@@ -71,6 +71,22 @@ namespace TMPro.Examples
             GameObject.FindGameObjectWithTag("mug2").transform.rotation.y + "," +
             GameObject.FindGameObjectWithTag("mug2").transform.rotation.z);
 
+            /*Debug.Log(m + "," + Time.deltaTime + ",handL," +
+            GameObject.FindGameObjectWithTag("handL").transform.position.x + "," +
+            GameObject.FindGameObjectWithTag("handL").transform.position.y + "," +
+            GameObject.FindGameObjectWithTag("handL").transform.position.z + "," +
+            GameObject.FindGameObjectWithTag("handL").transform.rotation.x + "," +
+            GameObject.FindGameObjectWithTag("handL").transform.rotation.y + "," +
+            GameObject.FindGameObjectWithTag("handL").transform.rotation.z); */
+
+            Debug.Log(m + "," + Time.deltaTime + ",handR," +
+            GameObject.FindGameObjectWithTag("handR").transform.position.x + "," +
+            GameObject.FindGameObjectWithTag("handR").transform.position.y + "," +
+            GameObject.FindGameObjectWithTag("handR").transform.position.z + "," +
+            GameObject.FindGameObjectWithTag("handR").transform.rotation.x + "," +
+            GameObject.FindGameObjectWithTag("handR").transform.rotation.y + "," +
+            GameObject.FindGameObjectWithTag("handR").transform.rotation.z);
+
             m++;
 
         }

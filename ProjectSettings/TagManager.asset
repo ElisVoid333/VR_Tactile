@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - mug1
+  - vibrate
+  - mug2
+  - SamplesInfoPanel
+  - handL
+  - handR
   layers:
   - Default
   - TransparentFX
