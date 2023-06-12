@@ -36,6 +36,26 @@ public class CSV_Writer : MonoBehaviour
     private float CrotY;
     private float CrotZ;
     private bool header3;
+    //Left Hand Values
+    string LH_filename = "";
+    string tag4 = "handR";
+    private float LHposX;
+    private float LHposY;
+    private float LHposZ;
+    private float LHrotX;
+    private float LHrotY;
+    private float LHrotZ;
+    private bool header4;
+    //Right Hand Values
+    string RH_filename = "";
+    string tag5 = "handR";
+    private float RHposX;
+    private float RHposY;
+    private float RHposZ;
+    private float RHrotX;
+    private float RHrotY;
+    private float RHrotZ;
+    private bool header5;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +66,10 @@ public class CSV_Writer : MonoBehaviour
         header2 = false;
         C_filename = Application.dataPath + "/LoggedFiles/RightController_Logs.csv";
         header3 = false;
+        LH_filename = Application.dataPath + "/LoggedFiles/LeftTrackedHand_Logs.csv";
+        header4 = false;
+        RH_filename = Application.dataPath + "/LoggedFiles/RightTrackedHand_Logs.csv";
+        header5 = false;
     }
 
     // Update is called once per frame
@@ -71,6 +95,20 @@ public class CSV_Writer : MonoBehaviour
         CrotX = GameObject.FindGameObjectWithTag(tag3).transform.rotation.y;
         CrotY = GameObject.FindGameObjectWithTag(tag3).transform.rotation.y;
         CrotZ = GameObject.FindGameObjectWithTag(tag3).transform.rotation.z;
+
+        LHposX = GameObject.FindGameObjectWithTag(tag4).transform.position.x;
+        LHposY = GameObject.FindGameObjectWithTag(tag4).transform.position.y;
+        LHposZ = GameObject.FindGameObjectWithTag(tag4).transform.position.z;
+        LHrotX = GameObject.FindGameObjectWithTag(tag4).transform.rotation.y;
+        LHrotY = GameObject.FindGameObjectWithTag(tag4).transform.rotation.y;
+        LHrotZ = GameObject.FindGameObjectWithTag(tag4).transform.rotation.z;
+
+        RHposX = GameObject.FindGameObjectWithTag(tag5).transform.position.x;
+        RHposY = GameObject.FindGameObjectWithTag(tag5).transform.position.y;
+        RHposZ = GameObject.FindGameObjectWithTag(tag5).transform.position.z;
+        RHrotX = GameObject.FindGameObjectWithTag(tag5).transform.rotation.y;
+        RHrotY = GameObject.FindGameObjectWithTag(tag5).transform.rotation.y;
+        RHrotZ = GameObject.FindGameObjectWithTag(tag5).transform.rotation.z;
 
         WriteCSV();
     }
@@ -109,7 +147,7 @@ public class CSV_Writer : MonoBehaviour
         else
         {
 
-            tw_M2.WriteLine("Blue Mug" + "," + MposX + "," + MposY + "," + MposZ + "," + MrotX + "," + MrotY + "," + MrotZ);
+            tw_M2.WriteLine("Blue Mug" + "," + M2posX + "," + M2posY + "," + M2posZ + "," + M2rotX + "," + M2rotY + "," + M2rotZ);
 
             tw_M2.Close();
         }
@@ -128,9 +166,47 @@ public class CSV_Writer : MonoBehaviour
         else
         {
 
-            tw_C.WriteLine("Right Controller" + "," + MposX + "," + MposY + "," + MposZ + "," + MrotX + "," + MrotY + "," + MrotZ);
+            tw_C.WriteLine("Right Controller" + "," + CposX + "," + CposY + "," + CposZ + "," + CrotX + "," + CrotY + "," + CrotZ);
 
             tw_C.Close();
+        }
+
+
+        TextWriter tw_LH = new StreamWriter(LH_filename, true);
+
+        if (header4 == false)
+        {
+            tw_LH.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z");
+
+            tw_LH.Close();
+
+            header4 = true;
+        }
+        else
+        {
+
+            tw_LH.WriteLine("Left Tracked Hand" + "," + LHposX + "," + LHposY + "," + LHposZ + "," + LHrotX + "," + LHrotY + "," + LHrotZ);
+
+            tw_LH.Close();
+        }
+
+
+        TextWriter tw_RH = new StreamWriter(RH_filename, true);
+
+        if (header5 == false)
+        {
+            tw_RH.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z");
+
+            tw_RH.Close();
+
+            header5 = true;
+        }
+        else
+        {
+
+            tw_RH.WriteLine("Left Tracked Hand" + "," + RHposX + "," + RHposY + "," + RHposZ + "," + RHrotX + "," + RHrotY + "," + RHrotZ);
+
+            tw_RH.Close();
         }
     }
 }

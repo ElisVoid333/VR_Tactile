@@ -4122,6 +4122,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8662184560443501606, guid: 94313e563929cb3499e3989be338a213, type: 3}
+      propertyPath: m_TagString
+      value: handTR
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 94313e563929cb3499e3989be338a213, type: 3}
 --- !u!1 &1423777088641738512
@@ -12922,6 +12926,10 @@ PrefabInstance:
     - target: {fileID: 336358375985414315, guid: e7fbb376593cff24f9db4ecf8d465aaf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2143258139782346740, guid: e7fbb376593cff24f9db4ecf8d465aaf, type: 3}
+      propertyPath: m_TagString
+      value: handTL
       objectReference: {fileID: 0}
     - target: {fileID: 8592730055715483824, guid: e7fbb376593cff24f9db4ecf8d465aaf, type: 3}
       propertyPath: _iModifyDataFromSourceMono

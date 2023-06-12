@@ -10,6 +10,8 @@ TagManager:
   - SamplesInfoPanel
   - handL
   - handR
+  - handTL
+  - handTR
   layers:
   - Default
   - TransparentFX
