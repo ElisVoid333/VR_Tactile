@@ -10,6 +10,7 @@ public class CSV_DataLogger : MonoBehaviour
     public string filename = "";
     string filePath;
     public string tag1 = "";
+    public bool WriteLogFiles;
     private float posX;
     private float posY;
     private float posZ;
@@ -36,7 +37,11 @@ public class CSV_DataLogger : MonoBehaviour
         rotY = GameObject.FindGameObjectWithTag(tag1).transform.rotation.y;
         rotZ = GameObject.FindGameObjectWithTag(tag1).transform.rotation.z;
 
-        WriteCSV();
+        if (WriteLogFiles)
+        {
+            WriteCSV();
+        }
+        //WriteCSV();
     }
 
     public void WriteCSV()

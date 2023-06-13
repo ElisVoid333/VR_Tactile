@@ -13,7 +13,7 @@ namespace TMPro.Examples
 
         private const string label = "The <#0050FF>count is: </color>{0:2}";
         private float m_frame;
-        public GameObject mug1, mug2;
+        //public GameObject mug1, mug2;
         int m=00;
 
         void Start()
@@ -62,30 +62,6 @@ namespace TMPro.Examples
             GameObject.FindGameObjectWithTag("mug1").transform.rotation.x + "," +
             GameObject.FindGameObjectWithTag("mug1").transform.rotation.y + "," +
             GameObject.FindGameObjectWithTag("mug1").transform.rotation.z);
-
-            Debug.Log(m + "," + Time.deltaTime + ",mug2," +
-            GameObject.FindGameObjectWithTag("mug2").transform.position.x + "," +
-            GameObject.FindGameObjectWithTag("mug2").transform.position.y + "," +
-            GameObject.FindGameObjectWithTag("mug2").transform.position.z + "," +
-            GameObject.FindGameObjectWithTag("mug2").transform.rotation.x + "," +
-            GameObject.FindGameObjectWithTag("mug2").transform.rotation.y + "," +
-            GameObject.FindGameObjectWithTag("mug2").transform.rotation.z);
-
-            /*Debug.Log(m + "," + Time.deltaTime + ",handL," +
-            GameObject.FindGameObjectWithTag("handL").transform.position.x + "," +
-            GameObject.FindGameObjectWithTag("handL").transform.position.y + "," +
-            GameObject.FindGameObjectWithTag("handL").transform.position.z + "," +
-            GameObject.FindGameObjectWithTag("handL").transform.rotation.x + "," +
-            GameObject.FindGameObjectWithTag("handL").transform.rotation.y + "," +
-            GameObject.FindGameObjectWithTag("handL").transform.rotation.z); */
-
-            Debug.Log(m + "," + Time.deltaTime + ",handR," +
-            GameObject.FindGameObjectWithTag("handR").transform.position.x + "," +
-            GameObject.FindGameObjectWithTag("handR").transform.position.y + "," +
-            GameObject.FindGameObjectWithTag("handR").transform.position.z + "," +
-            GameObject.FindGameObjectWithTag("handR").transform.rotation.x + "," +
-            GameObject.FindGameObjectWithTag("handR").transform.rotation.y + "," +
-            GameObject.FindGameObjectWithTag("handR").transform.rotation.z);
 
             m++;
 
