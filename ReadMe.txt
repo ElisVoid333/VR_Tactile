@@ -20,10 +20,7 @@ And later update by Jay Henderson and Elis Joynes.
     - TextMeshPro 3.06
     - Ardity 1.1.0 (unused in the latest version)
 
-The project works best when plugged in and run in rift mode with a quest. The haptic feedback works best this way.
-
-If you build it locally on a quest and run it that way everything still works but the haptic feedback gets reset to the
-default values which is much stronger and has an extented duration.
+The project only works when plugged in and run in rift mode with a quest. The haptic feedback works best this way. And the Data logging can be managed.
 
 ## Description ##
 This project is used to test how people respond to different interaction methods.
@@ -45,7 +42,15 @@ The Third Condition is using the controllers that provide haptic feedback to int
 will provide some vibrotactile feedback when the user comes in contact with the mug and when they pick it up. The user will 
 use the controllers to pick up and move the virtual mug onto the target.
 
-#To Change Conditions#
+## Data Logs Management ##
+The Data logging is handled by the Logger GameObject in the OVRCamerRig. Each script component is responsible for a tracked 
+gameObject, BlackMug, BlueMug, RightController, LeftHand, RightHand. The log files for these get dumped to LoggedFiles. 
+The files don't get overwritten, they just add the data to the already existing file and seperate it with a new header line.
+Before each Log session make sure there are no pre existing log files and if there are and they are important put them into 
+a folder within the LoggedFiles folder. After each Log session put the log files in a folder and properly label it so you 
+don't lose track of the data.
+
+## To Change Conditions ##
 To toggle between left controller mug and left controller hand.
 Go to the heirarchy:
 
