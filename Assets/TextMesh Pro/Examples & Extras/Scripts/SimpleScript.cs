@@ -55,13 +55,13 @@ namespace TMPro.Examples
             //m_frame += 1 * Time.deltaTime;
 
             //pos = GameObject.FindGameObjectWithTag("Your_Tag_Here").transform.position;
-            Debug.Log(m + "," + Time.deltaTime + ",mug1," +
+            /*Debug.Log(m + "," + Time.deltaTime + ",mug1," +
             GameObject.FindGameObjectWithTag("mug1").transform.position.x + "," +
             GameObject.FindGameObjectWithTag("mug1").transform.position.y + "," +
             GameObject.FindGameObjectWithTag("mug1").transform.position.z + "," +
             GameObject.FindGameObjectWithTag("mug1").transform.rotation.x + "," +
             GameObject.FindGameObjectWithTag("mug1").transform.rotation.y + "," +
-            GameObject.FindGameObjectWithTag("mug1").transform.rotation.z);
+            GameObject.FindGameObjectWithTag("mug1").transform.rotation.z);*/
 
             m++;
 
