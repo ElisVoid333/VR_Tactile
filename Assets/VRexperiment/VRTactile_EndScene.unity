@@ -1656,7 +1656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\BlackMug_Logs.csv
+  filename: \LoggedFiles\BlackMug_Logs
   tag1: mug1
   WriteLogFiles: 0
 --- !u!114 &987610143
@@ -1671,7 +1671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\RightHand_Logs.csv
+  filename: \LoggedFiles\RightHand_Logs
   tag1: handTR
   WriteLogFiles: 0
 --- !u!114 &987610144
@@ -1686,7 +1686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\LeftHand_Logs.csv
+  filename: \LoggedFiles\LeftHand_Logs
   tag1: handTL
   WriteLogFiles: 0
 --- !u!114 &987610145
@@ -1701,7 +1701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\RightController_Logs.csv
+  filename: \LoggedFiles\RightController_Logs
   tag1: handR
   WriteLogFiles: 0
 --- !u!114 &987610146
@@ -1716,7 +1716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\BlueMug_Logs.csv
+  filename: \LoggedFiles\BlueMug_Logs
   tag1: mug2
   WriteLogFiles: 0
 --- !u!4 &998254340 stripped

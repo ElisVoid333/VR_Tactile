@@ -9,6 +9,8 @@ public class CSV_DataLogger : MonoBehaviour
     //Black Mug Values
     public string filename = "";
     string filePath;
+    string IDfilename = "/LoggedFiles/ParticipantID.csv";
+    string IDfilePath;
     public string tag1 = "";
     public bool WriteLogFiles;
     private float posX;
@@ -18,13 +20,16 @@ public class CSV_DataLogger : MonoBehaviour
     private float rotY;
     private float rotZ;
     private bool header;
+    private string text;
 
 
     // Start is called before the first frame update
     void Start()
     {
         header = false;
-        filePath = Application.dataPath + filename;
+        IDfilePath = Application.dataPath + IDfilename;
+        text = File.ReadAllText(IDfilePath);
+        filePath = Application.dataPath + filename + "_" + text + ".csv";
     }
 
     // Update is called once per frame
@@ -64,4 +69,5 @@ public class CSV_DataLogger : MonoBehaviour
             tw.Close();
         }
     }
+
 }

@@ -39,11 +39,15 @@ public class TNVirtualKeyboard : MonoBehaviour
 	}
 	
 	public void Del(){
-		words = words.Remove(words.Length - 1, 1);
-		targetText.text = words;	
-		debugText.text = words;
+		if (words != "")
+		{
+            words = words.Remove(words.Length - 1, 1);
+            targetText.text = words;
+            debugText.text = words;
+        }
+		
 	}
-	
+
 	public void ShowVirtualKeyboard(){
 		vkCanvas.SetActive(true);
 	}

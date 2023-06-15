@@ -1642,7 +1642,7 @@ GameObject:
   - component: {fileID: 341296431}
   - component: {fileID: 341296432}
   m_Layer: 0
-  m_Name: PokeButton 8
+  m_Name: PokeButton Del
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5361,7 +5361,7 @@ Transform:
   m_GameObject: {fileID: 937781595}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 1}
+  m_LocalScale: {x: 2.2, y: 0.75, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1176028762}
@@ -5503,8 +5503,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _editor: {fileID: 937781599}
-  _width: 2
-  _height: 1
+  _width: 2.2
+  _height: 0.75
   _color: {r: 1, g: 1, b: 1, a: 0.078431375}
   _borderColor: {r: 0, g: 0, b: 0, a: 1}
   _radiusTopLeft: 0.3
@@ -5799,7 +5799,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _position: {x: 0, y: 0, z: 0}
-  _size: {x: 2, y: 0.75, z: 1}
+  _size: {x: 2.2, y: 0.75, z: 1}
 --- !u!114 &974874854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6110,7 +6110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\BlackMug_Logs.csv
+  filename: \LoggedFiles\BlackMug_Logs
   tag1: mug1
   WriteLogFiles: 0
 --- !u!114 &987610143
@@ -6125,7 +6125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\RightHand_Logs.csv
+  filename: \LoggedFiles\RightHand_Logs
   tag1: handTR
   WriteLogFiles: 0
 --- !u!114 &987610144
@@ -6140,7 +6140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\LeftHand_Logs.csv
+  filename: \LoggedFiles\LeftHand_Logs
   tag1: handTL
   WriteLogFiles: 0
 --- !u!114 &987610145
@@ -6155,7 +6155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\RightController_Logs.csv
+  filename: \LoggedFiles\RightController_Logs
   tag1: handR
   WriteLogFiles: 0
 --- !u!114 &987610146
@@ -6170,7 +6170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\BlueMug_Logs.csv
+  filename: \LoggedFiles\BlueMug_Logs
   tag1: mug2
   WriteLogFiles: 0
 --- !u!114 &987610147
@@ -9366,7 +9366,7 @@ GameObject:
   - component: {fileID: 1264376313}
   - component: {fileID: 1264376315}
   m_Layer: 0
-  m_Name: PokeButton 7
+  m_Name: PokeButton Enter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9505,9 +9505,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: vkKey, Assembly-CSharp
-        m_MethodName: KeyClick
+      - m_Target: {fileID: 987610147}
+        m_TargetAssemblyTypeName: CreateFolder, Assembly-CSharp
+        m_MethodName: WriteIDcsv
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1462173041}
+        m_TargetAssemblyTypeName: TNVirtualKeyboard, Assembly-CSharp
+        m_MethodName: HideVirtualKeyboard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11332,63 +11344,6 @@ Transform:
   m_Father: {fileID: 2000165608}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1576453206
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1081745641651877722, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_Name
-      value: TNVirtualKeyboard
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 18.557251
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1081745641651877723, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: af8006c4d4c3f674ba4b4bb9fd82152c, type: 3}
 --- !u!1 &1582614248
 GameObject:
   m_ObjectHideFlags: 0
@@ -13464,7 +13419,7 @@ Transform:
   m_GameObject: {fileID: 1870298430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.75, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1943392400}
@@ -13607,7 +13562,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _editor: {fileID: 1870298434}
   _width: 1
-  _height: 1
+  _height: 0.75
   _color: {r: 1, g: 1, b: 1, a: 0.078431375}
   _borderColor: {r: 0, g: 0, b: 0, a: 1}
   _radiusTopLeft: 0.3
