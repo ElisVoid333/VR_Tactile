@@ -51,6 +51,9 @@ Before each Log session make sure there are no pre existing log files and if the
 a folder within the LoggedFiles folder. After each Log session put the log files in a folder and properly label it so you 
 don't lose track of the data.
 
+***IMPORTANT***
+If the user is Left handed it is important to change the Haptics Handler in Interactables. Change Handedness to Left Handed.
+
 ## To Change Conditions ##
 To toggle between left controller mug and left controller hand.
 Go to the heirarchy:
