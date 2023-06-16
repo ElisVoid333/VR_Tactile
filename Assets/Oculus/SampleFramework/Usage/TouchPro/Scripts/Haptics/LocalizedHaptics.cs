@@ -15,14 +15,6 @@ public class LocalizedHaptics : MonoBehaviour
     public bool isGrabbed;
     public bool isHit;
 
-    /*private void OnTriggerEnter(Collider deskCollider)
-    {
-        if (isHit == false)
-        {
-            isHit = true;
-        }
-    }*/
-
     public void Grab() //Object has been grabbed
     {
         if (isGrabbed == false)

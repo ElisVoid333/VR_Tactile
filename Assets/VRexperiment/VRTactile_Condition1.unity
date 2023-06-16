@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!64 &195061986
@@ -718,6 +719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!64 &433677117
@@ -1199,6 +1201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!4 &810843689 stripped
@@ -1801,10 +1804,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\BlackMug_Logs
+  filename: \LoggedFiles\Main_LogData
   tag1: mug1
   WriteLogFiles: 1
   isGrabbed: {fileID: 1114100991}
+  WriteHeader: 1
   button: {fileID: 916279469}
 --- !u!114 &987610143
 MonoBehaviour:
@@ -1818,10 +1822,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\RightHand_Logs
+  filename: \LoggedFiles\Main_LogData
   tag1: handTR
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
+  WriteHeader: 0
   button: {fileID: 0}
 --- !u!114 &987610144
 MonoBehaviour:
@@ -1835,10 +1840,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\LeftHand_Logs
+  filename: \LoggedFiles\Main_LogData
   tag1: handTL
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
+  WriteHeader: 0
   button: {fileID: 0}
 --- !u!114 &987610145
 MonoBehaviour:
@@ -1852,10 +1858,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\RightController_Logs
+  filename: \LoggedFiles\Main_LogData
   tag1: handR
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
+  WriteHeader: 0
   button: {fileID: 0}
 --- !u!114 &987610147
 MonoBehaviour:
@@ -1869,10 +1876,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFiles\LeftController_Logs
+  filename: \LoggedFiles\Main_LogData
   tag1: handL
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
+  WriteHeader: 0
   button: {fileID: 0}
 --- !u!114 &987610148
 MonoBehaviour:
@@ -1886,10 +1894,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: \LoggedFIles\BlueMug_Logs
+  filename: \LoggedFiles\Main_LogData
   tag1: mug2
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
+  WriteHeader: 0
   button: {fileID: 0}
 --- !u!4 &998254340 stripped
 Transform:
@@ -3316,6 +3325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!136 &1427277054
@@ -3472,6 +3482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!64 &1723773600
@@ -3768,7 +3779,7 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 6099800089077584851, guid: c3bde1a6f623d4b569b67c73aedfebbf, type: 3}
 --- !u!23 &1929034573
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3876,7 +3887,7 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 6099800089077584851, guid: c3bde1a6f623d4b569b67c73aedfebbf, type: 3}
 --- !u!23 &1959400591
 MeshRenderer:
   m_ObjectHideFlags: 0

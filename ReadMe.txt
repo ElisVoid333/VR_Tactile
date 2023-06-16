@@ -54,6 +54,8 @@ don't lose track of the data.
 ***IMPORTANT***
 If the user is Left handed it is important to change the Haptics Handler in Interactables. Change Handedness to Left Handed.
 
+Start on VRTactile_IDnumber_input or you will run into Object Reference ERRORS
+
 ## To Change Conditions ##
 To toggle between left controller mug and left controller hand.
 Go to the heirarchy:

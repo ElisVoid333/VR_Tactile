@@ -13,27 +13,26 @@ public class CSV_DataLogger : MonoBehaviour
     string filePath;
     string IDfilename = "/LoggedFiles/ParticipantID.csv";
     string IDfilePath;
-    private Scene scene;
     public string tag1 = "";
     public bool WriteLogFiles;
+    public Grabbable isGrabbed;
+    public bool WriteHeader;
+    public GameObject button;
+
+    private Scene scene;
     private float posX;
     private float posY;
     private float posZ;
     private float rotX;
     private float rotY;
     private float rotZ;
-    public Grabbable isGrabbed;
-    private bool header;
     private string text;
     private GameObject item;
-    public GameObject button;
     private int grabs = 0;
-
 
     // Start is called before the first frame update
     void Start()
     {
-        header = false;
         scene = SceneManager.GetActiveScene();
         IDfilePath = Application.dataPath + IDfilename;
         text = File.ReadAllText(IDfilePath);
@@ -76,35 +75,35 @@ public class CSV_DataLogger : MonoBehaviour
 
         if (tag1 == "mug1")
         {
-            if (header == false)
+            if (WriteHeader == true)
             {
-                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, Times Picked Up, Scene Name");
+                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, Times Picked Up, " + scene.name);
 
                 tw.Close();
 
-                header = true;
+                WriteHeader = false;
             }
             else
             {
 
-                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + grabs + "," + scene.name);
+                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + grabs + "," + System.DateTime.Now);
 
                 tw.Close();
             }
         }else
         {
-            if (header == false)
+            if (WriteHeader == true)
             {
-                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, Scene Name");
+                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, " + scene.name);
 
                 tw.Close();
 
-                header = true;
+                WriteHeader = false;
             }
             else
             {
 
-                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + scene.name);
+                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + System.DateTime.Now);
 
                 tw.Close();
             }
