@@ -1659,6 +1659,7 @@ MonoBehaviour:
   filename: \LoggedFiles\BlackMug_Logs
   tag1: mug1
   WriteLogFiles: 0
+  isGrabbed: {fileID: 1114100991}
 --- !u!114 &987610143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1674,6 +1675,7 @@ MonoBehaviour:
   filename: \LoggedFiles\RightHand_Logs
   tag1: handTR
   WriteLogFiles: 0
+  isGrabbed: {fileID: 0}
 --- !u!114 &987610144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1689,6 +1691,7 @@ MonoBehaviour:
   filename: \LoggedFiles\LeftHand_Logs
   tag1: handTL
   WriteLogFiles: 0
+  isGrabbed: {fileID: 0}
 --- !u!114 &987610145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1704,6 +1707,7 @@ MonoBehaviour:
   filename: \LoggedFiles\RightController_Logs
   tag1: handR
   WriteLogFiles: 0
+  isGrabbed: {fileID: 0}
 --- !u!114 &987610146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1719,6 +1723,7 @@ MonoBehaviour:
   filename: \LoggedFiles\BlueMug_Logs
   tag1: mug2
   WriteLogFiles: 0
+  isGrabbed: {fileID: 0}
 --- !u!4 &998254340 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7001587203448011866, guid: 08bd653119f9db54fb91155eb09c459a, type: 3}
@@ -1986,6 +1991,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08bd653119f9db54fb91155eb09c459a, type: 3}
+--- !u!114 &1114100991 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6418746134552452932, guid: 08bd653119f9db54fb91155eb09c459a, type: 3}
+  m_PrefabInstance: {fileID: 1114100990}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f86b14a27b52f4f9298c33015b5c26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1125089331
 GameObject:
   m_ObjectHideFlags: 0
@@ -4232,6 +4248,8 @@ MonoBehaviour:
   _twoGrabTransformer: {fileID: 0}
   _targetTransform: {fileID: 0}
   _maxGrabPoints: -1
+  isGrabbed: 0
+  grabs: 0
 --- !u!1 &1561536548151703838
 GameObject:
   m_ObjectHideFlags: 0

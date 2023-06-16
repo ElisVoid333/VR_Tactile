@@ -41,6 +41,9 @@ namespace Oculus.Interaction
         [SerializeField]
         private int _maxGrabPoints = -1;
 
+        public bool isGrabbed;
+        public int grabs = 0;
+
         public int MaxGrabPoints
         {
             get
@@ -195,6 +198,23 @@ namespace Oculus.Interaction
             }
 
             base.OnDisable();
+        }
+
+        public void Grab() //Object has been grabbed
+        {
+            if (isGrabbed == false)
+            {
+                isGrabbed = true;
+                grabs++;
+            }
+        }
+
+        public void Drop() //Object has been dropped
+        {
+            if (isGrabbed == true)
+            {
+                isGrabbed = false;
+            }
         }
 
         #region Inject
