@@ -1695,7 +1695,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7516989854015812293, guid: d2d6934a666a18d46b8b7a3864dc9f63, type: 3}
       propertyPath: _whenSelect.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: LoadNextScene
+      value: LoadScene
       objectReference: {fileID: 0}
     - target: {fileID: 7516989854015812293, guid: d2d6934a666a18d46b8b7a3864dc9f63, type: 3}
       propertyPath: _whenUnselect.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -2031,11 +2031,8 @@ GameObject:
   m_Component:
   - component: {fileID: 987610140}
   - component: {fileID: 987610142}
-  - component: {fileID: 987610146}
   - component: {fileID: 987610147}
   - component: {fileID: 987610145}
-  - component: {fileID: 987610144}
-  - component: {fileID: 987610143}
   m_Layer: 0
   m_Name: Logger
   m_TagString: Untagged
@@ -2072,46 +2069,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\Main_LogData
   tag1: mug1
+  numTrials: 5
+  numBlocks: 2
   WriteLogFiles: 1
   isGrabbed: {fileID: 1114100991}
   WriteHeader: 1
   button: {fileID: 916279469}
---- !u!114 &987610143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 987610139}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  filename: \LoggedFiles\Main_LogData
-  tag1: handTR
-  WriteLogFiles: 1
-  isGrabbed: {fileID: 0}
-  WriteHeader: 0
-  button: {fileID: 0}
---- !u!114 &987610144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 987610139}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  filename: \LoggedFiles\Main_LogData
-  tag1: handTL
-  WriteLogFiles: 1
-  isGrabbed: {fileID: 0}
-  WriteHeader: 0
-  button: {fileID: 0}
 --- !u!114 &987610145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2126,24 +2089,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\Main_LogData
   tag1: handR
-  WriteLogFiles: 1
-  isGrabbed: {fileID: 0}
-  WriteHeader: 0
-  button: {fileID: 0}
---- !u!114 &987610146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 987610139}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d948a81281be942addee79e1801e1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  filename: \LoggedFiles\Main_LogData
-  tag1: mug2
+  numTrials: 5
+  numBlocks: 2
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
   WriteHeader: 0
@@ -2162,6 +2109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\Main_LogData
   tag1: handL
+  numTrials: 5
+  numBlocks: 2
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
   WriteHeader: 0

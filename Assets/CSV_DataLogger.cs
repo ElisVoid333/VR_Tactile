@@ -2,6 +2,7 @@ using Oculus.Interaction;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +15,8 @@ public class CSV_DataLogger : MonoBehaviour
     string IDfilename = "/LoggedFiles/ParticipantID.csv";
     string IDfilePath;
     public string tag1 = "";
+    public int numTrials;
+    public int numBlocks;
     public bool WriteLogFiles;
     public Grabbable isGrabbed;
     public bool WriteHeader;
@@ -27,21 +30,22 @@ public class CSV_DataLogger : MonoBehaviour
     private float rotY;
     private float rotZ;
     private string text;
+    private string order;
     private GameObject item;
     private int grabs = 0;
+    private int blockCount = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         scene = SceneManager.GetActiveScene();
         IDfilePath = Application.dataPath + IDfilename;
-        text = File.ReadAllText(IDfilePath);
+        text = File.ReadLines(IDfilePath).Skip(0).Take(1).First();
+        order = File.ReadLines(IDfilePath).Skip(1).Take(1).First();
+        //text = File.ReadAllText(IDfilePath);
         filePath = Application.dataPath + filename + "_" + text + ".csv";
         item = GameObject.FindGameObjectWithTag(tag1);
-        if (tag1 == "mug1")
-        {
-            button.SetActive(false);
-        }
+        button.SetActive(false);
     }
 
     // Update is called once per frame
@@ -56,9 +60,14 @@ public class CSV_DataLogger : MonoBehaviour
         if (tag1 == "mug1")
         {
             grabs = isGrabbed.grabs;
-            if(grabs > 5)
+            if(grabs >= numTrials)
             {
-                button.SetActive(true);
+                if (blockCount >= numBlocks)
+                {
+                    button.SetActive(true);
+                }
+                blockCount++;
+                isGrabbed.grabs = 0;
             }
         }
 
@@ -66,7 +75,6 @@ public class CSV_DataLogger : MonoBehaviour
         {
             WriteCSV();
         }
-        //WriteCSV();
     }
 
     public void WriteCSV()
@@ -77,7 +85,7 @@ public class CSV_DataLogger : MonoBehaviour
         {
             if (WriteHeader == true)
             {
-                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, Times Picked Up, " + scene.name);
+                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, Times Picked Up, " + scene.name + "," + order);
 
                 tw.Close();
 
@@ -86,7 +94,7 @@ public class CSV_DataLogger : MonoBehaviour
             else
             {
 
-                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + grabs + "," + System.DateTime.Now);
+                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + System.DateTime.Now + "," + grabs);
 
                 tw.Close();
             }
@@ -94,7 +102,7 @@ public class CSV_DataLogger : MonoBehaviour
         {
             if (WriteHeader == true)
             {
-                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, " + scene.name);
+                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, " + scene.name + "," + order);
 
                 tw.Close();
 
