@@ -458,7 +458,8 @@ PrefabInstance:
       propertyPath: m_text
       value: "Please pick up the Black mug and place it on the target to your right.
         Then pick it back up and place it back in it's original place. \n\nRepeat
-        These steps 5 times.\n"
+        These steps until the Red Button appears on the bottom right corner of the
+        desk."
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190401906338, guid: bf018bf093319f840a7314cb25167d8c, type: 3}
       propertyPath: m_fontSize

@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!64 &195061986
@@ -728,6 +729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!64 &433677117
@@ -1072,6 +1074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!4 &810843689 stripped
@@ -1658,8 +1661,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\BlackMug_Logs
   tag1: mug1
+  numTrials: 0
+  numBlocks: 0
   WriteLogFiles: 0
   isGrabbed: {fileID: 1114100991}
+  WriteHeader: 0
+  button: {fileID: 0}
 --- !u!114 &987610143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1674,8 +1681,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\RightHand_Logs
   tag1: handTR
+  numTrials: 0
+  numBlocks: 0
   WriteLogFiles: 0
   isGrabbed: {fileID: 0}
+  WriteHeader: 0
+  button: {fileID: 0}
 --- !u!114 &987610144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1690,8 +1701,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\LeftHand_Logs
   tag1: handTL
+  numTrials: 0
+  numBlocks: 0
   WriteLogFiles: 0
   isGrabbed: {fileID: 0}
+  WriteHeader: 0
+  button: {fileID: 0}
 --- !u!114 &987610145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1706,8 +1721,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\RightController_Logs
   tag1: handR
+  numTrials: 0
+  numBlocks: 0
   WriteLogFiles: 0
   isGrabbed: {fileID: 0}
+  WriteHeader: 0
+  button: {fileID: 0}
 --- !u!114 &987610146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1722,8 +1741,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\BlueMug_Logs
   tag1: mug2
+  numTrials: 0
+  numBlocks: 0
   WriteLogFiles: 0
   isGrabbed: {fileID: 0}
+  WriteHeader: 0
+  button: {fileID: 0}
 --- !u!4 &998254340 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7001587203448011866, guid: 08bd653119f9db54fb91155eb09c459a, type: 3}
@@ -3149,6 +3172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!136 &1427277054
@@ -3305,6 +3329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9934e1fe91ce6246bc5d27934aa09f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handedness: 2
   isGrabbed: 0
   isHit: 0
 --- !u!64 &1723773600
@@ -5009,7 +5034,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!137 &2212713704504041318
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -6302,7 +6327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2212713705524169369
 Transform:
   m_ObjectHideFlags: 0
@@ -8566,7 +8591,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &2830055730777425337
 MeshFilter:
   m_ObjectHideFlags: 0
