@@ -33,6 +33,7 @@ public class CSV_DataLogger : MonoBehaviour
     private string order;
     private GameObject item;
     private int grabs = 0;
+    private bool grabbed = false;
     private int blockCount = 0;
 
     // Start is called before the first frame update
@@ -45,7 +46,11 @@ public class CSV_DataLogger : MonoBehaviour
         //text = File.ReadAllText(IDfilePath);
         filePath = Application.dataPath + filename + "_" + text + ".csv";
         item = GameObject.FindGameObjectWithTag(tag1);
-        button.SetActive(false);
+        if (tag1 == "mug1")
+        {
+            grabbed = isGrabbed.isGrabbed;
+            button.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -85,7 +90,7 @@ public class CSV_DataLogger : MonoBehaviour
         {
             if (WriteHeader == true)
             {
-                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, Times Picked Up, " + scene.name + "," + order);
+                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, Currently Being Held, Times Picked Up, " + scene.name + "," + order);
 
                 tw.Close();
 
@@ -94,7 +99,7 @@ public class CSV_DataLogger : MonoBehaviour
             else
             {
 
-                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + System.DateTime.Now + "," + grabs);
+                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + System.DateTime.Now + "," + grabbed + "," + grabs);
 
                 tw.Close();
             }

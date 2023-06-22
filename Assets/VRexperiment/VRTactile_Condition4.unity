@@ -1782,6 +1782,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\Main_LogData
   tag1: mug1
+  numTrials: 5
+  numBlocks: 2
   WriteLogFiles: 1
   isGrabbed: {fileID: 1114100991}
   WriteHeader: 1
@@ -1800,6 +1802,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\Main_LogData
   tag1: handTR
+  numTrials: 5
+  numBlocks: 2
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
   WriteHeader: 0
@@ -1818,6 +1822,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\Main_LogData
   tag1: handTL
+  numTrials: 5
+  numBlocks: 2
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
   WriteHeader: 0
@@ -1836,6 +1842,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\Main_LogData
   tag1: handR
+  numTrials: 0
+  numBlocks: 0
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
   WriteHeader: 0
@@ -1854,10 +1862,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\Main_LogData
   tag1: mug2
+  numTrials: 5
+  numBlocks: 2
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
   WriteHeader: 0
-  button: {fileID: 0}
+  button: {fileID: 916279469}
 --- !u!114 &987610147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1872,6 +1882,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filename: \LoggedFiles\Main_LogData
   tag1: handL
+  numTrials: 0
+  numBlocks: 0
   WriteLogFiles: 1
   isGrabbed: {fileID: 0}
   WriteHeader: 0
