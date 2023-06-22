@@ -33,7 +33,7 @@ public class CSV_DataLogger : MonoBehaviour
     private string order;
     private GameObject item;
     private int grabs = 0;
-    private bool grabbed = false;
+    private bool grabbed;
     private int blockCount = 0;
 
     // Start is called before the first frame update
@@ -48,7 +48,7 @@ public class CSV_DataLogger : MonoBehaviour
         item = GameObject.FindGameObjectWithTag(tag1);
         if (tag1 == "mug1")
         {
-            grabbed = isGrabbed.isGrabbed;
+            grabbed = false;
             button.SetActive(false);
         }
     }
@@ -65,14 +65,62 @@ public class CSV_DataLogger : MonoBehaviour
         if (tag1 == "mug1")
         {
             grabs = isGrabbed.grabs;
-            if(grabs >= numTrials)
+            grabbed = isGrabbed.isGrabbed;
+            if (grabs == numTrials)
+            {
+                if (blockCount >= numBlocks)
+                {
+                    button.SetActive(true);
+                } else if (blockCount == 0)
+                {
+                    blockCount++;
+                }
+            } else if (grabs == numTrials * 2)
             {
                 if (blockCount >= numBlocks)
                 {
                     button.SetActive(true);
                 }
-                blockCount++;
-                isGrabbed.grabs = 0;
+                else if (blockCount == 1)
+                {
+                    blockCount++;
+                }
+            } else if (grabs == numTrials * 3)
+            {
+                if (blockCount >= numBlocks)
+                {
+                    button.SetActive(true);
+                }
+                else if (blockCount == 2)
+                {
+                    blockCount++;
+                }
+            } else if (grabs == numTrials * 4)
+            {
+                if (blockCount >= numBlocks)
+                {
+                    button.SetActive(true);
+                }
+                else if (blockCount == 3)
+                {
+                    blockCount++;
+                }
+            } else if (grabs == numTrials * 5)
+            {
+                if (blockCount >= numBlocks)
+                {
+                    button.SetActive(true);
+                }
+                else if (blockCount == 4)
+                {
+                    blockCount++;
+                }
+            } else
+            {
+                if (blockCount > numBlocks)
+                {
+                    button.SetActive(true);
+                }
             }
         }
 
@@ -90,7 +138,7 @@ public class CSV_DataLogger : MonoBehaviour
         {
             if (WriteHeader == true)
             {
-                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, Currently Being Held, Times Picked Up, " + scene.name + "," + order);
+                tw.WriteLine("Object Name, Position x, Position y, Position z, Rotation x, Rotation y, Rotation z, TimeStamp, Currently Being Held, Block Number, Trial Number, " + scene.name + "," + order);
 
                 tw.Close();
 
@@ -99,7 +147,7 @@ public class CSV_DataLogger : MonoBehaviour
             else
             {
 
-                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + System.DateTime.Now + "," + grabbed + "," + grabs);
+                tw.WriteLine(tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + System.DateTime.Now + "," + grabbed + "," + blockCount + "," + grabs);
 
                 tw.Close();
             }
