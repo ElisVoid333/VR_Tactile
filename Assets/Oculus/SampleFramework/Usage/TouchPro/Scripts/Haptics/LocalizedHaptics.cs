@@ -5,7 +5,7 @@ using UnityEngine;
 public class LocalizedHaptics : MonoBehaviour
 {
     [Header("Settings")] //This is the default code that was originally in the file
-    [SerializeField] private OVRInput.Handedness m_handedness = OVRInput.Handedness.RightHanded; //This is the default code that was originally in the file
+    [SerializeField] private OVRInput.Handedness m_handedness; //This is the default code that was originally in the file
 
     private OVRInput.Controller m_controller; //This is the default code that was originally in the file
     //public Collider mugCollider;

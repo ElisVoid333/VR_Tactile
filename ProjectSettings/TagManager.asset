@@ -12,6 +12,7 @@ TagManager:
   - handR
   - handTL
   - handTR
+  - target
   layers:
   - Default
   - TransparentFX

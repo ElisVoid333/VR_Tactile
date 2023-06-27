@@ -456,10 +456,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190401906338, guid: bf018bf093319f840a7314cb25167d8c, type: 3}
       propertyPath: m_text
-      value: "Please pick up the Black mug and place it on the target to your right.
-        Then pick it back up and place it back in it's original place. \n\nRepeat
-        These steps until the Red Button appears on the bottom right corner of the
-        desk."
+      value: "Please pick up the Black mug with your dominant hand and place it on
+        the target to your right. Then pick it back up and place it back in it's
+        original place. \n\nRepeat These steps until the Red Button appears on the
+        bottom right corner of the desk."
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147190401906338, guid: bf018bf093319f840a7314cb25167d8c, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147190401906338, guid: bf018bf093319f840a7314cb25167d8c, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190401906339, guid: bf018bf093319f840a7314cb25167d8c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1960,6 +1968,7 @@ GameObject:
   - component: {fileID: 987610142}
   - component: {fileID: 987610145}
   - component: {fileID: 987610147}
+  - component: {fileID: 987610148}
   m_Layer: 0
   m_Name: Logger
   m_TagString: Untagged
@@ -2019,9 +2028,9 @@ MonoBehaviour:
   numTrials: 5
   numBlocks: 3
   WriteLogFiles: 1
-  isGrabbed: {fileID: 0}
+  isGrabbed: {fileID: 6418746133506345914}
   WriteHeader: 0
-  button: {fileID: 0}
+  button: {fileID: 916279469}
 --- !u!114 &987610147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2039,9 +2048,31 @@ MonoBehaviour:
   numTrials: 5
   numBlocks: 3
   WriteLogFiles: 1
-  isGrabbed: {fileID: 0}
+  isGrabbed: {fileID: 6418746133506345914}
   WriteHeader: 0
-  button: {fileID: 0}
+  button: {fileID: 916279469}
+--- !u!114 &987610148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 987610139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b50244f5359e94c42bff04a34873967f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_handedness: 2
+  filename: \LoggedFiles\Important_LogData
+  mug: mug1
+  grabMug: {fileID: 6418746133506345914}
+  RightHand: handR
+  LeftHand: handL
+  numTrials: 5
+  numBlocks: 3
+  WriteLogFiles: 1
+  WriteHeader: 1
 --- !u!4 &1006234244 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400122, guid: 442d5b4503ed83c4897ef44659446587, type: 3}
@@ -4222,8 +4253,8 @@ GameObject:
   - component: {fileID: 1959400591}
   - component: {fileID: 1959400590}
   m_Layer: 0
-  m_Name: Circle
-  m_TagString: Untagged
+  m_Name: Target
+  m_TagString: target
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
