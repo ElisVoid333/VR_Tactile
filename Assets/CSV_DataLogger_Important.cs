@@ -36,16 +36,16 @@ public class CSV_DataLogger_Important : MonoBehaviour
 {
     [SerializeField] private OVRInput.Handedness m_handedness = OVRInput.Handedness.RightHanded;
 
-    public string filename = "";
+    public string filename = ""; //input field for filename
     string filePath;
     string IDfilename = "/LoggedFiles/ParticipantID.csv";
     string IDfilePath;
-    public string mug;
-    public Grabbable grabMug;
-    public string RightHand;
-    public string LeftHand;
-    public int numTrials;
-    public int numBlocks;
+    public string mug; //input field for mug tag
+    public Grabbable grabMug; //input field for mug
+    public string RightHand; //input field for right hand/controller tag
+    public string LeftHand; //input field for left hand/controller tag
+    public int numTrials; //input field for the number of trials required
+    public int numBlocks; //input field for the number of blocks required
     public bool WriteLogFiles;
     public bool WriteHeader;
 
@@ -64,34 +64,36 @@ public class CSV_DataLogger_Important : MonoBehaviour
     private bool PUtimeset;
     private bool Dtimeset;
     private bool grabbed;
+    private bool mugVisible;
     private int blockCount = 1;
 
     // Start is called before the first frame update
     void Start()
     {
-        Mug.name = GameObject.FindGameObjectWithTag(mug);
+        Mug.name = GameObject.FindGameObjectWithTag(mug); // Get Gameobjects using the inputted tags
         HandControllerL.name = GameObject.FindGameObjectWithTag(LeftHand);
         HandControllerR.name = GameObject.FindGameObjectWithTag(RightHand);
 
         scene = SceneManager.GetActiveScene();
         IDfilePath = Application.dataPath + IDfilename;
-        text = File.ReadLines(IDfilePath).Skip(0).Take(1).First();
-        order = File.ReadLines(IDfilePath).Skip(1).Take(1).First();
-        filePath = Application.dataPath + filename + "_" + text + ".csv";
+        text = File.ReadLines(IDfilePath).Skip(0).Take(1).First(); //Read the participant ID from the ParticipantID file
+        order = File.ReadLines(IDfilePath).Skip(1).Take(1).First(); //Read the order from the ParticipantID file
+        filePath = Application.dataPath + filename + "_" + text + ".csv"; //set the filepath to write to
         target = GameObject.FindGameObjectWithTag("target");
 
         grabbed = false;
         PUtimeset = false;
         Dtimeset = false;
+        mugVisible = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Mug.posX = Mug.name.transform.position.x;
+        Mug.posX = Mug.name.transform.position.x; // Update mugs current positions
         Mug.posY = Mug.name.transform.position.y;
         Mug.posZ = Mug.name.transform.position.z;
-        Mug.rotX = Mug.name.transform.rotation.x;
+        Mug.rotX = Mug.name.transform.rotation.x; // Update mugs current rotations
         Mug.rotY = Mug.name.transform.rotation.y;
         Mug.rotZ = Mug.name.transform.rotation.z;
         if (m_handedness == OVRInput.Handedness.RightHanded)
@@ -119,7 +121,14 @@ public class CSV_DataLogger_Important : MonoBehaviour
                 if (blockCount > numBlocks)
                 {
                     blockCount = 0;
-                    break;
+                    //Mug.name.SetActive(false); // Hide Mug once all blocks are completed
+                    mugVisible = false;
+                }
+                else if (blockCount == i && grabs == (numTrials * numBlocks))
+                {
+                    blockCount = 0;
+                    //Mug.name.SetActive(false); // Hide Mug once all blocks are completed
+                    mugVisible = false;
                 }
                 else if (blockCount == i)
                 {
@@ -131,7 +140,8 @@ public class CSV_DataLogger_Important : MonoBehaviour
                 if (blockCount > numBlocks)
                 {
                     blockCount = 0;
-                    break;
+                    //Mug.name.SetActive(false); // Hide Mug once all blocks are completed
+                    mugVisible = false;
                 }
             }
         }
@@ -140,7 +150,7 @@ public class CSV_DataLogger_Important : MonoBehaviour
         grabbed = grabMug.isGrabbed;
         if (grabs != prevGrabs)
         {
-            if (grabbed && !PUtimeset)
+            if (grabbed && !PUtimeset) // if the mug is picked up and pickup time hasn't been set yet, set the pickup values and time
             {
                 PUtime = System.DateTime.Now;
 
@@ -172,7 +182,7 @@ public class CSV_DataLogger_Important : MonoBehaviour
 
                 PUtimeset = true;
             }
-            else if (!grabbed && !Dtimeset)
+            else if (!grabbed && !Dtimeset) // if the mug has been dropped and the drop time hasn't been set yet, set the drop values and time
             {
                 Dtime = System.DateTime.Now;
 
@@ -202,12 +212,16 @@ public class CSV_DataLogger_Important : MonoBehaviour
                     HandControllerL.DrotZ = HandControllerL.rotZ;
                 }
                 
-
                 Dtimeset = true;
-                if (WriteLogFiles && grabs >= 1)
+
+                if (!mugVisible)
                 {
-                    WriteCSV();
+                    Mug.name.SetActive(mugVisible); // Hide Mug once all blocks are completed
+                }else if (WriteLogFiles)
+                {
+                    WriteCSV(); // Write the values 
                 }
+
                 prevGrabs = grabs;
             }
         }
@@ -237,7 +251,7 @@ public class CSV_DataLogger_Important : MonoBehaviour
 
             WriteHeader = false;
         }
-        else if (m_handedness == OVRInput.Handedness.RightHanded)
+        else if (m_handedness == OVRInput.Handedness.RightHanded) // Right hand values
         {
             tw.WriteLine(text + "," + scene.name + "," + order + "," + blockCount + "," + grabs + "," + PUtime + "," 
                         + Mug.PUposX + "," + Mug.PUposY + "," + Mug.PUposZ + "," 
@@ -250,7 +264,7 @@ public class CSV_DataLogger_Important : MonoBehaviour
 
             tw.Close();
         }
-        else if (m_handedness == OVRInput.Handedness.LeftHanded)
+        else if (m_handedness == OVRInput.Handedness.LeftHanded) // Left hand values
         {
             tw.WriteLine(text + "," + scene.name + "," + order + "," + blockCount + "," + grabs + "," + PUtime + ","
                         + Mug.PUposX + "," + Mug.PUposY + "," + Mug.PUposZ + ","
