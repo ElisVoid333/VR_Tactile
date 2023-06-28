@@ -44,8 +44,6 @@ public class CSV_DataLogger_Important : MonoBehaviour
     public Grabbable grabMug;
     public string RightHand;
     public string LeftHand;
-    //public string handL;
-    //public string handR;
     public int numTrials;
     public int numBlocks;
     public bool WriteLogFiles;
@@ -53,8 +51,6 @@ public class CSV_DataLogger_Important : MonoBehaviour
 
     private Scene scene;
     private InteractionItem Mug;
-    //private InteractionItem HandTrackedL;
-    //private InteractionItem HandTrackedR;
     private InteractionItem HandControllerL;
     private InteractionItem HandControllerR;
     private GameObject target;
@@ -76,8 +72,6 @@ public class CSV_DataLogger_Important : MonoBehaviour
         Mug.name = GameObject.FindGameObjectWithTag(mug);
         HandControllerL.name = GameObject.FindGameObjectWithTag(LeftHand);
         HandControllerR.name = GameObject.FindGameObjectWithTag(RightHand);
-        //HandTrackedR.name = GameObject.FindGameObjectWithTag(handR);
-        //HandTrackedL.name = GameObject.FindGameObjectWithTag(handL);
 
         scene = SceneManager.GetActiveScene();
         IDfilePath = Application.dataPath + IDfilename;
@@ -89,8 +83,6 @@ public class CSV_DataLogger_Important : MonoBehaviour
         grabbed = false;
         PUtimeset = false;
         Dtimeset = false;
-
-        WriteCSV();
     }
 
     // Update is called once per frame
@@ -119,7 +111,6 @@ public class CSV_DataLogger_Important : MonoBehaviour
             HandControllerL.rotY = HandControllerL.name.transform.rotation.y;
             HandControllerL.rotZ = HandControllerL.name.transform.rotation.z;
         }
-        
 
         for (int i = 1; i <= numBlocks; i++)
         {
@@ -160,7 +151,6 @@ public class CSV_DataLogger_Important : MonoBehaviour
                 Mug.PUrotY = Mug.rotY;
                 Mug.PUrotZ = Mug.rotZ;
 
-                
                 if (m_handedness == OVRInput.Handedness.RightHanded)
                 {
                     HandControllerR.PUposX = HandControllerR.posX;
@@ -214,7 +204,7 @@ public class CSV_DataLogger_Important : MonoBehaviour
                 
 
                 Dtimeset = true;
-                if (WriteLogFiles)
+                if (WriteLogFiles && grabs >= 1)
                 {
                     WriteCSV();
                 }
@@ -249,7 +239,6 @@ public class CSV_DataLogger_Important : MonoBehaviour
         }
         else if (m_handedness == OVRInput.Handedness.RightHanded)
         {
-
             tw.WriteLine(text + "," + scene.name + "," + order + "," + blockCount + "," + grabs + "," + PUtime + "," 
                         + Mug.PUposX + "," + Mug.PUposY + "," + Mug.PUposZ + "," 
                         + HandControllerR.PUposX + "," + HandControllerR.PUposY + "," + HandControllerR.PUposZ + "," 
@@ -263,7 +252,6 @@ public class CSV_DataLogger_Important : MonoBehaviour
         }
         else if (m_handedness == OVRInput.Handedness.LeftHanded)
         {
-
             tw.WriteLine(text + "," + scene.name + "," + order + "," + blockCount + "," + grabs + "," + PUtime + ","
                         + Mug.PUposX + "," + Mug.PUposY + "," + Mug.PUposZ + ","
                         + HandControllerL.PUposX + "," + HandControllerL.PUposY + "," + HandControllerL.PUposZ + ","

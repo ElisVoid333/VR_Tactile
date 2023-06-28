@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 
 public class CSV_DataLogger : MonoBehaviour
 {
-    //Black Mug Values
     public string filename = "";
     string filePath;
     string IDfilename = "/LoggedFiles/ParticipantID.csv";

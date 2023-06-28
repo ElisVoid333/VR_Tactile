@@ -53,6 +53,7 @@ don't lose track of the data.
 
 ***IMPORTANT***
 If the user is Left handed it is important to change the Haptics Handler in Interactables. Change Handedness to Left Handed.
+You also need to change the handedness in the Logger so that it's tracking the correct hand for the Important Logs.
 Repeat this for each condition Scene.
 
 Start on VRTactile_IDnumber_input or you will run into Object Reference ERRORS

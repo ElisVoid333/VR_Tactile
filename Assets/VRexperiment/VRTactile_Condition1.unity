@@ -2009,7 +2009,7 @@ MonoBehaviour:
   numBlocks: 3
   WriteLogFiles: 1
   isGrabbed: {fileID: 6418746133506345914}
-  WriteHeader: 1
+  WriteHeader: 0
   button: {fileID: 916279469}
 --- !u!114 &987610145
 MonoBehaviour:
@@ -2072,7 +2072,7 @@ MonoBehaviour:
   numTrials: 5
   numBlocks: 3
   WriteLogFiles: 1
-  WriteHeader: 1
+  WriteHeader: 0
 --- !u!4 &1006234244 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400122, guid: 442d5b4503ed83c4897ef44659446587, type: 3}
