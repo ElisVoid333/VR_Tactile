@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro; 
 
-public class TNVirtualKeyboard : MonoBehaviour
+public class VirtualKeyboard : MonoBehaviour
 {
 	
-	public static TNVirtualKeyboard instance;
+	public static VirtualKeyboard instance;
 	
 	public string words = "";
 	
@@ -15,7 +15,6 @@ public class TNVirtualKeyboard : MonoBehaviour
 	
 	public TMP_InputField targetText;
 	
-	public Text debugText;
 	
     // Start is called before the first frame update
     void Start()
@@ -35,7 +34,6 @@ public class TNVirtualKeyboard : MonoBehaviour
 	public void KeyPress(string k){
 		words += k;
 		targetText.text = words;	
-		debugText.text = words;
 	}
 	
 	public void Del(){
@@ -43,7 +41,6 @@ public class TNVirtualKeyboard : MonoBehaviour
 		{
             words = words.Remove(words.Length - 1, 1);
             targetText.text = words;
-            debugText.text = words;
         }
 		
 	}
