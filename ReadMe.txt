@@ -56,7 +56,7 @@ If the participant is Left handed then they must press the Left hand toggle when
 Start on VRTactile_IDnumber_input or you will run into Object Reference ERRORS
 
 ## To Change Conditions ##
-To toggle between left controller mug and left controller hand.
+To toggle between left controller mug and left controller hand in the 4th condition.
 Go to the heirarchy:
 
 OVRCamerRig

@@ -8,6 +8,10 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * This is the class that handles the output to the Important data logging file
+ */
+
 struct InteractionItem
 {
     public GameObject name;

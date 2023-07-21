@@ -8,12 +8,14 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * This is the class that handles the output to the Main data logging file
+ */
+
 public class CSV_DataLogger : MonoBehaviour
 {
     public string filename = "";
     string filePath;
-    string IDfilename = "/LoggedFiles/ParticipantID.csv";
-    string IDfilePath;
     public string tag1 = "";
     public int numTrials;
     public int numBlocks;
@@ -41,7 +43,6 @@ public class CSV_DataLogger : MonoBehaviour
     void Start()
     {
         scene = SceneManager.GetActiveScene();
-        IDfilePath = Application.dataPath + IDfilename;
         pid = PlayerPrefs.GetInt("pid");
         conditionOrder = PlayerPrefs.GetInt("conditionOrder");
 
@@ -68,7 +69,6 @@ public class CSV_DataLogger : MonoBehaviour
                 break;
         }
 
-        //text = File.ReadAllText(IDfilePath);
         filePath = Application.dataPath + filename + "_" + pid + ".csv";
         item = GameObject.FindGameObjectWithTag(tag1);
 

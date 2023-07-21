@@ -7,15 +7,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using static UnityEngine.GraphicsBuffer;
 
+/*
+ * This is the class that creates the csv data logging files and writes the headers. These files later get the data written into them
+ * in CSV_DataLogger and CSV_DataLogger_Important.
+ */
+
 public class CreateFolder : MonoBehaviour
 {
     public TMP_InputField targetText;
-    //string IDfilename = "/LoggedFiles/ParticipantID.csv";
     public string mainfilename = "";
     public string filename = "";
     string mainfilePath;
     string filePath;
-    //string orderStr = "";
     public bool WriteMainHeader;
     public bool WriteHeader;
 
@@ -23,37 +26,11 @@ public class CreateFolder : MonoBehaviour
     // Start is called before the first frame update
     public void StartTask()
     {
-        //IDfilePath = Application.dataPath + IDfilename;
-
         int id = int.Parse(targetText.text);
         PlayerPrefs.SetInt("pid", id);
 
         int conditionOrder = GetConditionOrdering(id);
         PlayerPrefs.SetInt("conditionOrder", conditionOrder);
-        /*
-        switch (conditionOrder)
-        {
-            case (0):
-                orderStr = "ABDC";
-
-                break;
-
-            case (1):
-                orderStr = "BCAD";
-
-                break;
-
-            case (2):
-                orderStr = "CDBA";
-
-                break;
-
-            case (3):
-                orderStr = "DACB";
-
-                break;
-        }
-        */
         WriteMainCSV();
         WriteCSV();
     }
