@@ -1,4 +1,5 @@
 using Oculus.Interaction;
+using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -28,8 +29,9 @@ public class CSV_DataLogger : MonoBehaviour
     private float rotX;
     private float rotY;
     private float rotZ;
-    private string text;
+    private int pid;
     private string order;
+    private int conditionOrder;
     private GameObject item;
     private int grabs = 0;
     private bool grabbed;
@@ -40,10 +42,34 @@ public class CSV_DataLogger : MonoBehaviour
     {
         scene = SceneManager.GetActiveScene();
         IDfilePath = Application.dataPath + IDfilename;
-        text = File.ReadLines(IDfilePath).Skip(0).Take(1).First();
-        order = File.ReadLines(IDfilePath).Skip(1).Take(1).First();
+        pid = PlayerPrefs.GetInt("pid");
+        conditionOrder = PlayerPrefs.GetInt("conditionOrder");
+
+        switch (conditionOrder)
+        {
+            case (0):
+                order = "ABDC";
+
+                break;
+
+            case (1):
+                order = "BCAD";
+
+                break;
+
+            case (2):
+                order = "CDBA";
+
+                break;
+
+            case (3):
+                order = "DACB";
+
+                break;
+        }
+
         //text = File.ReadAllText(IDfilePath);
-        filePath = Application.dataPath + filename + "_" + text + ".csv";
+        filePath = Application.dataPath + filename + "_" + pid + ".csv";
         item = GameObject.FindGameObjectWithTag(tag1);
 
         grabbed = false;
@@ -110,7 +136,7 @@ public class CSV_DataLogger : MonoBehaviour
         else
         {
 
-            tw.WriteLine(text + "," + tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + System.DateTime.Now + "," + grabbed + "," + blockCount + "," + grabs + "," + scene.name + "," + order);
+            tw.WriteLine(pid + "," + tag1 + "," + posX + "," + posY + "," + posZ + "," + rotX + "," + rotY + "," + rotZ + "," + System.DateTime.Now + "," + grabbed + "," + blockCount + "," + grabs + "," + scene.name + "," + order);
 
             tw.Close();
         }

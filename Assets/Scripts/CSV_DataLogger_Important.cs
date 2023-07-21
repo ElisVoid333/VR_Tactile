@@ -1,4 +1,5 @@
 using Oculus.Interaction;
+using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -34,12 +35,12 @@ struct InteractionItem
 
 public class CSV_DataLogger_Important : MonoBehaviour
 {
-    [SerializeField] private OVRInput.Handedness m_handedness = OVRInput.Handedness.RightHanded;
+    private OVRInput.Handedness m_handedness;
+    private int handedness;
 
     public string filename = ""; //input field for filename
     string filePath;
-    string IDfilename = "/LoggedFiles/ParticipantID.csv";
-    string IDfilePath;
+    //string IDfilename = "/LoggedFiles/ParticipantID.csv";
     public string mug; //input field for mug tag
     public Grabbable grabMug; //input field for mug
     public string RightHand; //input field for right hand/controller tag
@@ -55,7 +56,8 @@ public class CSV_DataLogger_Important : MonoBehaviour
     private InteractionItem HandControllerR;
     private GameObject target;
 
-    private string text;
+    private int pid;
+    private int conditionOrder;
     private string order;
     private int grabs = 0;
     private int prevGrabs = 0;
@@ -75,11 +77,54 @@ public class CSV_DataLogger_Important : MonoBehaviour
         HandControllerR.name = GameObject.FindGameObjectWithTag(RightHand);
 
         scene = SceneManager.GetActiveScene();
-        IDfilePath = Application.dataPath + IDfilename;
-        text = File.ReadLines(IDfilePath).Skip(0).Take(1).First(); //Read the participant ID from the ParticipantID file
-        order = File.ReadLines(IDfilePath).Skip(1).Take(1).First(); //Read the order from the ParticipantID file
-        filePath = Application.dataPath + filename + "_" + text + ".csv"; //set the filepath to write to
+        pid = PlayerPrefs.GetInt("pid");
+        conditionOrder = PlayerPrefs.GetInt("conditionOrder");
+
+        switch (conditionOrder)
+        {
+            case (0):
+                order = "ABDC";
+
+                break;
+
+            case (1):
+                order = "BCAD";
+
+                break;
+
+            case (2):
+                order = "CDBA";
+
+                break;
+
+            case (3):
+                order = "DACB";
+
+                break;
+        }
+
+        filePath = Application.dataPath + filename + "_" + pid + ".csv"; //set the filepath to write to
         target = GameObject.FindGameObjectWithTag("target");
+
+        handedness = PlayerPrefs.GetInt("left");
+
+        switch (handedness)
+        {
+            case (0):
+                m_handedness = OVRInput.Handedness.RightHanded;
+
+                break;
+
+            case (1):
+                m_handedness = OVRInput.Handedness.LeftHanded;
+
+                break;
+
+            default:
+                m_handedness = OVRInput.Handedness.RightHanded;
+
+                break;
+        }
 
         grabbed = false;
         PUtimeset = false;
@@ -253,7 +298,7 @@ public class CSV_DataLogger_Important : MonoBehaviour
         }
         else if (m_handedness == OVRInput.Handedness.RightHanded) // Right hand values
         {
-            tw.WriteLine(text + "," + scene.name + "," + order + "," + blockCount + "," + grabs + "," + PUtime + "," 
+            tw.WriteLine(pid + "," + scene.name + "," + order + "," + blockCount + "," + grabs + "," + PUtime + "," 
                         + Mug.PUposX + "," + Mug.PUposY + "," + Mug.PUposZ + "," 
                         + HandControllerR.PUposX + "," + HandControllerR.PUposY + "," + HandControllerR.PUposZ + "," 
                         + HandControllerR.PUrotX + "," + HandControllerR.PUrotY + "," + HandControllerR.PUrotZ + "," + PUtime + "," 
@@ -266,7 +311,7 @@ public class CSV_DataLogger_Important : MonoBehaviour
         }
         else if (m_handedness == OVRInput.Handedness.LeftHanded) // Left hand values
         {
-            tw.WriteLine(text + "," + scene.name + "," + order + "," + blockCount + "," + grabs + "," + PUtime + ","
+            tw.WriteLine(pid + "," + scene.name + "," + order + "," + blockCount + "," + grabs + "," + PUtime + ","
                         + Mug.PUposX + "," + Mug.PUposY + "," + Mug.PUposZ + ","
                         + HandControllerL.PUposX + "," + HandControllerL.PUposY + "," + HandControllerL.PUposZ + ","
                         + HandControllerL.PUrotX + "," + HandControllerL.PUrotY + "," + HandControllerL.PUrotZ + "," + PUtime + ","

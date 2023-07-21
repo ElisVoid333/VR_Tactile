@@ -4,48 +4,58 @@ using System.IO;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.GraphicsBuffer;
 
 public class CreateFolder : MonoBehaviour
 {
     public TMP_InputField targetText;
-    public int order;
-    string IDfilename = "/LoggedFiles/ParticipantID.csv";
+    //string IDfilename = "/LoggedFiles/ParticipantID.csv";
     public string mainfilename = "";
     public string filename = "";
     string mainfilePath;
     string filePath;
-    string IDfilePath;
-    string orderStr = "";
-    private System.Random rnd = new System.Random();
+    //string orderStr = "";
     public bool WriteMainHeader;
     public bool WriteHeader;
 
 
     // Start is called before the first frame update
-    void Start()
+    public void StartTask()
     {
-        IDfilePath = Application.dataPath + IDfilename;
-        //order = rnd.Next(1,4);
-        if (order == 1)
+        //IDfilePath = Application.dataPath + IDfilename;
+
+        int id = int.Parse(targetText.text);
+        PlayerPrefs.SetInt("pid", id);
+
+        int conditionOrder = GetConditionOrdering(id);
+        PlayerPrefs.SetInt("conditionOrder", conditionOrder);
+        /*
+        switch (conditionOrder)
         {
-            orderStr = "ABDC";
-        }else if (order == 2)
-        {
-            orderStr = "BCAD";
+            case (0):
+                orderStr = "ABDC";
+
+                break;
+
+            case (1):
+                orderStr = "BCAD";
+
+                break;
+
+            case (2):
+                orderStr = "CDBA";
+
+                break;
+
+            case (3):
+                orderStr = "DACB";
+
+                break;
         }
-        else if (order == 3)
-        {
-            orderStr = "CDBA";
-        }
-        else if (order == 4)
-        {
-            orderStr = "DACB";
-        }
-        else
-        {
-            orderStr = "No Order";
-        }
+        */
+        WriteMainCSV();
+        WriteCSV();
     }
 
     // Update is called once per frame
@@ -54,9 +64,12 @@ public class CreateFolder : MonoBehaviour
         
     }
 
-    public void WriteIDcsv()
+    public static int GetConditionOrdering(int pid)
     {
-        File.WriteAllText(IDfilePath, targetText.text + "\n" + orderStr);
+
+        int order = pid % 4;
+
+        return order;
     }
 
     public void WriteMainCSV()

@@ -46,15 +46,12 @@ a virtual mug model. The user is meant to use their bare hands to pick up the ph
 ## Data Logs Management ##
 The Data logging is handled by the Logger GameObject in the OVRCamerRig. Each script component is responsible for a tracked 
 gameObject, BlackMug, BlueMug, RightController, LeftHand, RightHand. The log files for these get dumped to LoggedFiles. 
-The files don't get overwritten, they just add the data to the already existing file and seperate it with a new header line.
-Before each Log session make sure there are no pre existing log files and if there are and they are important put them into 
-a folder within the LoggedFiles folder. After each Log session put the log files in a folder and properly label it so you 
-don't lose track of the data.
+The files don't get overwritten, they just add the data to the already existing file.
+Before each Log session make sure there are no pre existing log files with the same participant ID number and if there are 
+and they are important put them into a folder within the LoggedFiles folder.
 
 ***IMPORTANT***
-If the user is Left handed it is important to change the Haptics Handler in Interactables. Change Handedness to Left Handed.
-You also need to change the handedness in the Logger so that it's tracking the correct hand for the Important Logs.
-Repeat this for each condition Scene.
+If the participant is Left handed then they must press the Left hand toggle when they input their participant ID number.
 
 Start on VRTactile_IDnumber_input or you will run into Object Reference ERRORS
 

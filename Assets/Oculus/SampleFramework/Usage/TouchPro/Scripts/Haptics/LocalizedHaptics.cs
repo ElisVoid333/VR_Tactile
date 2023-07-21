@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class LocalizedHaptics : MonoBehaviour
 {
-    [Header("Settings")] //This is the default code that was originally in the file
-    [SerializeField] private OVRInput.Handedness m_handedness; //This is the default code that was originally in the file
+    //[Header("Settings")] //This is the default code that was originally in the file
+    //[SerializeField] private OVRInput.Handedness m_handedness; //This is the default code that was originally in the file
+
 
     private OVRInput.Controller m_controller; //This is the default code that was originally in the file
     //public Collider mugCollider;
     //public Collider L_handCollider;
     //public Collider R_handCollider;
     //public Collider deskCollider;
+
+    private int handedness;
+
     public bool isGrabbed;
     public bool isHit;
 
@@ -49,9 +53,26 @@ public class LocalizedHaptics : MonoBehaviour
 
     private void Start()
     {
-        // --------------This is the default code that was originally in the file ---------------------------
-        m_controller = m_handedness == OVRInput.Handedness.LeftHanded ? OVRInput.Controller.LTouch : OVRInput.Controller.RTouch;
-        //m_controller = OVRInput.Controller.RTouch;
+        handedness = PlayerPrefs.GetInt("left");
+
+        switch (handedness)
+        {
+            case (0):
+                m_controller = OVRInput.Controller.RTouch;
+
+                break;
+
+            case (1):
+                m_controller = OVRInput.Controller.LTouch;
+
+                break;
+
+            default:
+                m_controller = OVRInput.Controller.RTouch;
+
+                break;
+        }
+
         isGrabbed = false;
         isHit = false;
     }

@@ -1,3 +1,4 @@
+using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -8,9 +9,7 @@ using UnityEngine.SceneManagement;
 public class ScenesManager : MonoBehaviour
 {
     public static ScenesManager Instance;
-    string IDfilename = "/LoggedFiles/ParticipantID.csv";
-    string IDfilePath;
-    private string order;
+    private int order;
     string scene1 = "VRTactile_Condition1";
     string scene2 = "VRTactile_Condition2";
     string scene3 = "VRTactile_Condition3";
@@ -25,26 +24,33 @@ public class ScenesManager : MonoBehaviour
 
     public void LoadScene()
     {
-        IDfilePath = Application.dataPath + IDfilename;
-        order = File.ReadLines(IDfilePath).Skip(1).Take(1).First();
-        if (order == "ABDC")
+        order = PlayerPrefs.GetInt("conditionOrder");
+
+        switch (order)
         {
-            LoadNextScene(1);
-        }else if (order == "BCAD")
-        {
-            LoadNextScene(2);
-        }
-        else if (order == "CDBA")
-        {
-            LoadNextScene(3);
-        }
-        else if (order == "DACB")
-        {
-            LoadNextScene(4);
-        }
-        else
-        {
-            SceneManager.LoadScene(sceneEnd);
+            case (0):
+                LoadNextScene(1);
+
+                break;
+
+            case (1):
+                LoadNextScene(2);
+
+                break;
+
+            case (2):
+                LoadNextScene(3);
+
+                break;
+
+            case (3):
+                LoadNextScene(4);
+
+                break;
+            default:
+                SceneManager.LoadScene(sceneEnd);
+
+                break;
         }
     }
 
